@@ -6,7 +6,7 @@ import Navbar from '../components/Navbar';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
-const fmt = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmt = (n) => '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 function StatCard({ icon: Icon, label, value, sub, color }) {
     return (
@@ -70,7 +70,7 @@ export default function Dashboard() {
 
                 {/* Stat cards */}
                 <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 mb-8">
-                    <StatCard icon={DollarSign} label="Cash Balance" value={fmt(portfolio?.balance ?? user?.balance ?? 0)} color="#6366f1" />
+                    <StatCard icon={DollarSign} label="Cash Balance" value={fmt(portfolio?.balance ?? user?.balance ?? 0)} color="var(--accent)" />
                     <StatCard icon={PieChart} label="Invested Value" value={fmt(portfolio?.totalCurrentValue ?? 0)} color="#8b5cf6" />
                     <StatCard icon={BarChart2} label="Total Portfolio" value={fmt(portfolio?.totalPortfolioValue ?? 0)} color="#06b6d4" />
                     <StatCard

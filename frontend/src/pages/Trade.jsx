@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
-const fmt = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmt = (n) => '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 export default function Trade() {
     const { user, updateBalance } = useAuth();
@@ -99,7 +99,7 @@ export default function Trade() {
                         <AnimatePresence mode="wait">
                             {quote && (
                                 <motion.div key={quote.symbol} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
-                                    className="mt-5 p-4 rounded-xl" style={{ background: 'rgba(99,102,241,0.06)', border: '1px solid rgba(99,102,241,0.2)' }}>
+                                    className="mt-5 p-4 rounded-xl" style={{ background: 'var(--bg-card-hover)', border: '1px solid var(--border)' }}>
                                     <div className="flex items-start justify-between">
                                         <div>
                                             <p className="text-xl font-bold">{quote.symbol}</p>

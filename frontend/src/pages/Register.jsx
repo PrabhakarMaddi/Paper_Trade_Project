@@ -31,7 +31,7 @@ export default function Register() {
     return (
         <div className="min-h-screen flex items-center justify-center" style={{ background: 'radial-gradient(ellipse at top, #1a1040 0%, #0a0e1a 60%)' }}>
             {/* Ambient blobs */}
-            <div className="fixed top-20 left-20 w-72 h-72 rounded-full opacity-10 blur-3xl" style={{ background: '#6366f1' }} />
+            <div className="fixed top-20 left-20 w-72 h-72 rounded-full opacity-10 blur-3xl" style={{ background: 'var(--accent)' }} />
             <div className="fixed bottom-20 right-20 w-96 h-96 rounded-full opacity-10 blur-3xl" style={{ background: '#06b6d4' }} />
 
             <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}
@@ -39,7 +39,7 @@ export default function Register() {
 
                 {/* Logo */}
                 <div className="flex items-center gap-3 mb-8">
-                    <div className="w-10 h-10 rounded-xl flex items-center justify-center" style={{ background: 'linear-gradient(135deg,#6366f1,#8b5cf6)' }}>
+                    <div className="w-10 h-10 rounded-xl flex items-center justify-center p-2" style={{ background: 'linear-gradient(135deg, var(--accent), #2dd4bf)' }}>
                         <TrendingUp size={20} color="white" />
                     </div>
                     <div>
@@ -49,7 +49,7 @@ export default function Register() {
                 </div>
 
                 <h2 className="text-2xl font-bold mb-1">Create Account</h2>
-                <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>Start trading with $100,000 virtual money</p>
+                <p className="text-sm mb-6" style={{ color: 'var(--text-secondary)' }}>Start trading with ₹100,000 virtual money</p>
 
                 {error && (
                     <div className="mb-4 p-3 rounded-lg text-sm" style={{ background: 'rgba(239,68,68,0.1)', border: '1px solid rgba(239,68,68,0.3)', color: '#ef4444' }}>

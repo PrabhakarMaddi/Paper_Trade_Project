@@ -5,7 +5,7 @@ import Navbar from '../components/Navbar';
 import api from '../api/axios';
 import { useAuth } from '../context/AuthContext';
 
-const fmt = (n) => '$' + Number(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const fmt = (n) => '₹' + Number(n).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
 
 const rankIcon = (rank) => {
     if (rank === 1) return <Crown size={18} style={{ color: '#f59e0b' }} />;
@@ -70,7 +70,7 @@ export default function Leaderboard() {
                                     const isMe = l.username === user?.username;
                                     return (
                                         <motion.tr key={l.username} initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: i * 0.04 }}
-                                            className="border-t" style={{ borderColor: 'var(--border)', background: isMe ? 'rgba(99,102,241,0.06)' : 'transparent' }}>
+                                            className="border-t" style={{ borderColor: 'var(--border)', background: isMe ? 'var(--bg-card-hover)' : 'transparent' }}>
                                             <td className="py-3.5 pr-4 w-12">
                                                 <div className="flex items-center justify-center w-8 h-8 rounded-lg"
                                                     style={{ background: l.rank <= 3 ? 'rgba(245,158,11,0.1)' : 'transparent' }}>
@@ -79,7 +79,7 @@ export default function Leaderboard() {
                                             </td>
                                             <td className="py-3.5 pr-4 font-semibold">
                                                 {l.username}
-                                                {isMe && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ background: 'rgba(99,102,241,0.15)', color: 'var(--accent)' }}>You</span>}
+                                                {isMe && <span className="ml-2 text-xs px-2 py-0.5 rounded-full" style={{ background: 'var(--bg-card-hover)', border: '1px solid var(--border)', color: 'var(--accent)' }}>You</span>}
                                             </td>
                                             <td className="py-3.5 pr-4" style={{ color: 'var(--text-secondary)' }}>{fmt(l.balance)}</td>
                                             <td className="py-3.5 pr-4" style={{ color: 'var(--text-secondary)' }}>{fmt(l.stockValue)}</td>

@@ -2,18 +2,18 @@ const axios = require('axios');
 
 // A comprehensive mock dataset so app works without a Finnhub API key
 const MOCK_STOCKS = {
-    AAPL: { symbol: 'AAPL', name: 'Apple Inc.', price: 178.5, change: 1.2, changePercent: 0.68 },
-    MSFT: { symbol: 'MSFT', name: 'Microsoft Corp.', price: 415.2, change: 3.1, changePercent: 0.75 },
-    GOOGL: { symbol: 'GOOGL', name: 'Alphabet Inc.', price: 175.8, change: -0.8, changePercent: -0.45 },
-    AMZN: { symbol: 'AMZN', name: 'Amazon.com Inc.', price: 185.6, change: 2.5, changePercent: 1.37 },
-    TSLA: { symbol: 'TSLA', name: 'Tesla Inc.', price: 245.0, change: -5.2, changePercent: -2.08 },
-    META: { symbol: 'META', name: 'Meta Platforms Inc.', price: 505.3, change: 7.8, changePercent: 1.57 },
-    NVDA: { symbol: 'NVDA', name: 'NVIDIA Corp.', price: 878.4, change: 15.3, changePercent: 1.77 },
-    NFLX: { symbol: 'NFLX', name: 'Netflix Inc.', price: 628.9, change: 4.1, changePercent: 0.66 },
-    AMD: { symbol: 'AMD', name: 'Advanced Micro Devices', price: 178.2, change: 2.8, changePercent: 1.60 },
-    DIS: { symbol: 'DIS', name: 'Walt Disney Co.', price: 112.4, change: -1.3, changePercent: -1.15 },
-    BABA: { symbol: 'BABA', name: 'Alibaba Group', price: 73.5, change: 0.9, changePercent: 1.24 },
-    JPM: { symbol: 'JPM', name: 'JPMorgan Chase', price: 198.7, change: 1.6, changePercent: 0.81 },
+    RELIANCE: { symbol: 'RELIANCE', name: 'Reliance Industries Ltd.', price: 2950.4, change: 15.2, changePercent: 0.51 },
+    TCS: { symbol: 'TCS', name: 'Tata Consultancy Services', price: 4120.5, change: -12.1, changePercent: -0.29 },
+    HDFCBANK: { symbol: 'HDFCBANK', name: 'HDFC Bank Ltd.', price: 1450.8, change: 8.5, changePercent: 0.58 },
+    INFY: { symbol: 'INFY', name: 'Infosys Ltd.', price: 1680.2, change: 25.4, changePercent: 1.53 },
+    ICICIBANK: { symbol: 'ICICIBANK', name: 'ICICI Bank Ltd.', price: 1089.6, change: 5.2, changePercent: 0.47 },
+    SBIN: { symbol: 'SBIN', name: 'State Bank of India', price: 765.4, change: -3.8, changePercent: -0.49 },
+    BHARTIARTL: { symbol: 'BHARTIARTL', name: 'Bharti Airtel Ltd.', price: 1215.3, change: 18.7, changePercent: 1.56 },
+    ITC: { symbol: 'ITC', name: 'ITC Ltd.', price: 425.6, change: 1.2, changePercent: 0.28 },
+    LNT: { symbol: 'LNT', name: 'Larsen & Toubro Ltd.', price: 3750.8, change: 45.3, changePercent: 1.22 },
+    BAJFINANCE: { symbol: 'BAJFINANCE', name: 'Bajaj Finance Ltd.', price: 7120.5, change: -55.4, changePercent: -0.77 },
+    WIPRO: { symbol: 'WIPRO', name: 'Wipro Ltd.', price: 530.2, change: 4.8, changePercent: 0.91 },
+    TATAMOTORS: { symbol: 'TATAMOTORS', name: 'Tata Motors Ltd.', price: 1012.5, change: 15.6, changePercent: 1.56 },
 };
 
 /**
