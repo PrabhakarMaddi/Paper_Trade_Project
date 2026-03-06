@@ -19,7 +19,6 @@ const StockChart = ({ symbol }) => {
             setLoading(true);
             try {
                 const { data } = await axios.get(`/stock/intraday/${symbol}`);
-                // Transform the data for the chart (Area chart works better than candlestick in basic re-charts)
                 setData(data.map(item => ({
                     time: new Date(item.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
                     price: item.close
@@ -35,8 +34,8 @@ const StockChart = ({ symbol }) => {
     }, [symbol]);
 
     if (loading) return (
-        <div className="h-[350px] flex items-center justify-center bg-white/[0.02] rounded-3xl border border-white/5 animate-pulse">
-            <span className="text-xs font-black uppercase tracking-[0.4em] text-slate-500 italic">Rendering Matrix...</span>
+        <div className="h-[350px] flex items-center justify-center bg-slate-50 rounded-3xl border border-slate-100 animate-pulse">
+            <span className="text-xs font-bold uppercase tracking-[0.4em] text-text-light italic">Rendering Analysis...</span>
         </div>
     );
 
@@ -46,46 +45,48 @@ const StockChart = ({ symbol }) => {
                 <AreaChart data={data}>
                     <defs>
                         <linearGradient id="colorPrice" x1="0" y1="0" x2="0" y2="1">
-                            <stop offset="5%" stopColor="#3b82f6" stopOpacity={0.3} />
-                            <stop offset="95%" stopColor="#3b82f6" stopOpacity={0} />
+                            <stop offset="5%" stopColor="#4f46e5" stopOpacity={0.15} />
+                            <stop offset="95%" stopColor="#4f46e5" stopOpacity={0} />
                         </linearGradient>
                     </defs>
-                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff05" vertical={false} />
+                    <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" vertical={false} />
                     <XAxis
                         dataKey="time"
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: '#64748b', fontSize: 10, fontWeight: 900 }}
-                        minTickGap={30}
+                        tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }}
+                        minTickGap={40}
+                        dy={10}
                     />
                     <YAxis
                         domain={['auto', 'auto']}
                         axisLine={false}
                         tickLine={false}
-                        tick={{ fill: '#64748b', fontSize: 10, fontWeight: 900 }}
+                        tick={{ fill: '#94a3b8', fontSize: 11, fontWeight: 700 }}
                         orientation="right"
+                        dx={10}
                     />
                     <Tooltip
                         contentStyle={{
-                            backgroundColor: '#151d27',
-                            border: '1px solid rgba(255,255,255,0.1)',
-                            borderRadius: '16px',
+                            backgroundColor: '#ffffff',
+                            border: '1px solid #e2e8f0',
+                            borderRadius: '12px',
                             fontSize: '12px',
-                            fontWeight: 900,
-                            fontStyle: 'italic',
-                            color: '#fff'
+                            fontWeight: 700,
+                            boxShadow: '0 4px 12px rgba(79, 70, 229, 0.08)',
+                            padding: '12px'
                         }}
-                        itemStyle={{ color: '#3b82f6' }}
-                        cursor={{ stroke: '#3b82f6', strokeWidth: 2 }}
+                        itemStyle={{ color: '#4f46e5' }}
+                        cursor={{ stroke: '#4f46e5', strokeWidth: 1, strokeDasharray: '4 4' }}
                     />
                     <Area
                         type="monotone"
                         dataKey="price"
-                        stroke="#3b82f6"
-                        strokeWidth={4}
+                        stroke="#4f46e5"
+                        strokeWidth={3}
                         fillOpacity={1}
                         fill="url(#colorPrice)"
-                        animationDuration={1500}
+                        animationDuration={1000}
                     />
                 </AreaChart>
             </ResponsiveContainer>

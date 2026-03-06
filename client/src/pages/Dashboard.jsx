@@ -23,8 +23,8 @@ const Dashboard = () => {
 
     if (loading) return (
         <div className="h-[60vh] flex flex-col items-center justify-center gap-4">
-            <div className="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
-            <p className="text-slate-400 font-medium animate-pulse">Fetching your market data...</p>
+            <div className="w-12 h-12 border-4 border-primary/10 border-t-primary rounded-full animate-spin"></div>
+            <p className="text-text-muted font-bold animate-pulse">Analyzing market positions...</p>
         </div>
     );
 
@@ -32,92 +32,94 @@ const Dashboard = () => {
 
     return (
         <div className="space-y-10">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-black tracking-tighter sm:text-5xl">Dashboard</h1>
-                    <p className="text-slate-400 mt-2 font-medium">Welcome back! Here's your market performance today.</p>
+                    <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl text-text-main uppercase">Dashboard</h1>
+                    <p className="text-text-muted mt-2 font-medium">Welcome back! Here's your market performance today.</p>
                 </div>
-                <div className="bg-white/5 border border-white/10 px-6 py-3 rounded-2xl flex items-center gap-4 backdrop-blur-sm">
+                <div className="bg-white border border-border-main px-8 py-4 rounded-2xl flex items-center gap-6 shadow-sm shadow-indigo-50/50">
                     <div className="text-right">
-                        <p className="text-[10px] uppercase font-black text-slate-500 tracking-[0.2em]">Net Worth</p>
-                        <p className="text-2xl font-black text-white">₹{summary.netWorth.toLocaleString('en-IN')}</p>
+                        <p className="text-[10px] uppercase font-bold text-text-light tracking-[0.2em] mb-1">Net Worth</p>
+                        <p className="text-3xl font-bold text-text-main">₹{summary.netWorth.toLocaleString('en-IN')}</p>
                     </div>
-                    <div className={`p-3 rounded-xl ${summary.totalPnl >= 0 ? 'bg-accent/20 text-accent' : 'bg-accent-down/20 text-accent-down'}`}>
-                        {summary.totalPnl >= 0 ? <ArrowUpRight size={24} /> : <ArrowDownRight size={24} />}
+                    <div className={`p-4 rounded-xl shadow-inner ${summary.totalPnl >= 0 ? 'bg-accent-up/10 text-accent-up' : 'bg-accent-down/10 text-accent-down'}`}>
+                        {summary.totalPnl >= 0 ? <ArrowUpRight size={28} /> : <ArrowDownRight size={28} />}
                     </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                <div className="glass-card relative overflow-hidden group">
-                    <IndianRupee className="absolute -right-4 -bottom-4 text-white/5 group-hover:text-white/10 transition-colors" size={120} />
-                    <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-blue-500"></span> Available Cash
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div className="glass-card relative overflow-hidden group border-indigo-100">
+                    <IndianRupee className="absolute -right-4 -bottom-4 text-primary/5 group-hover:text-primary/10 transition-colors" size={120} />
+                    <p className="text-text-muted text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-primary/40"></span> Available Cash
                     </p>
-                    <p className="text-4xl font-black tracking-tight italic">₹{summary.balance.toLocaleString('en-IN')}</p>
+                    <p className="text-4xl font-bold tracking-tight text-text-main">₹{summary.balance.toLocaleString('en-IN')}</p>
                 </div>
 
-                <div className="glass-card relative overflow-hidden group">
-                    <Briefcase className="absolute -right-4 -bottom-4 text-white/5 group-hover:text-white/10 transition-colors" size={120} />
-                    <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-2">
-                        <span className="w-2 h-2 rounded-full bg-purple-500"></span> Portfolio Value
+                <div className="glass-card relative overflow-hidden group border-purple-100">
+                    <Briefcase className="absolute -right-4 -bottom-4 text-purple-500/5 group-hover:text-purple-500/10 transition-colors" size={120} />
+                    <p className="text-text-muted text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 rounded-full bg-purple-400/40"></span> Portfolio Value
                     </p>
-                    <p className="text-4xl font-black tracking-tight italic">₹{summary.totalCurrentValue.toLocaleString('en-IN')}</p>
+                    <p className="text-4xl font-bold tracking-tight text-text-main">₹{summary.totalCurrentValue.toLocaleString('en-IN')}</p>
                 </div>
 
-                <div className="glass-card relative overflow-hidden group">
-                    <Activity className="absolute -right-4 -bottom-4 text-white/5 group-hover:text-white/10 transition-colors" size={120} />
-                    <p className="text-slate-400 text-xs font-black uppercase tracking-widest mb-2 flex items-center gap-2">
-                        <span className={`w-2 h-2 rounded-full ${summary.totalPnl >= 0 ? 'bg-accent' : 'bg-accent-down'}`}></span> Overall Return
+                <div className="glass-card relative overflow-hidden group border-emerald-100">
+                    <Activity className="absolute -right-4 -bottom-4 text-accent-up/5 group-hover:text-accent-up/10 transition-colors" size={120} />
+                    <p className="text-text-muted text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                        <span className={`w-2.5 h-2.5 rounded-full ${summary.totalPnl >= 0 ? 'bg-accent-up' : 'bg-accent-down'}`}></span> Overall Return
                     </p>
-                    <p className={`text-4xl font-black tracking-tight italic ${summary.totalPnl >= 0 ? 'text-accent' : 'text-accent-down'}`}>
+                    <p className={`text-4xl font-bold tracking-tight ${summary.totalPnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
                         {summary.totalPnl >= 0 ? '+' : ''}₹{summary.totalPnl.toLocaleString('en-IN')}
                     </p>
-                    <div className={`flex items-center gap-2 mt-2 font-black text-sm ${summary.totalPnl >= 0 ? 'text-accent' : 'text-accent-down'}`}>
+                    <div className={`flex items-center gap-2 mt-2 font-bold text-sm ${summary.totalPnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
                         {summary.totalPnl >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
                         {summary.totalPnlPercent}%
                     </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div className="lg:col-span-2">
-                    <div className="glass-card h-full">
-                        <div className="flex items-center justify-between mb-8">
-                            <h2 className="text-2xl font-black tracking-tight italic">Active Holdings</h2>
-                            <button className="text-xs font-black uppercase tracking-widest text-primary hover:text-white transition-colors">View All</button>
+                    <div className="glass-card h-full p-10">
+                        <div className="flex items-center justify-between mb-10">
+                            <h2 className="text-2xl font-bold tracking-tight text-text-main">ACTIVE HOLDINGS</h2>
+                            <button className="text-xs font-bold uppercase tracking-widest text-primary hover:underline transition-all">View Full Portfolio</button>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
-                                    <tr className="text-left text-slate-500 text-[10px] uppercase font-black tracking-[0.2em] border-b border-white/5">
-                                        <th className="pb-4">Stock Asset</th>
-                                        <th className="pb-4">Qty</th>
-                                        <th className="pb-4 text-right">Market Price</th>
-                                        <th className="pb-4 text-right">Total Returns</th>
+                                    <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main">
+                                        <th className="pb-5">Stock Asset</th>
+                                        <th className="pb-5">Quantity</th>
+                                        <th className="pb-5 text-right">Market Price</th>
+                                        <th className="pb-5 text-right">Total Returns</th>
                                     </tr>
                                 </thead>
-                                <tbody className="divide-y divide-white/5">
+                                <tbody className="divide-y divide-border-light">
                                     {holdings.length === 0 ? (
                                         <tr>
-                                            <td colSpan="4" className="py-12 text-center text-slate-500 font-bold italic">
-                                                No active positions. The market is waiting for you!
+                                            <td colSpan="4" className="py-20 text-center text-text-muted font-medium">
+                                                No active positions found. Explore the markets to start trading!
                                             </td>
                                         </tr>
                                     ) : (
                                         holdings.slice(0, 5).map((h) => (
-                                            <tr key={h.stockSymbol} className="group hover:bg-white/[0.02] transition-colors">
-                                                <td className="py-5">
+                                            <tr key={h.stockSymbol} className="group hover:bg-slate-50 transition-colors">
+                                                <td className="py-6">
                                                     <div className="flex flex-col">
-                                                        <span className="symbol-badge w-fit mb-1 bg-primary/10 text-primary border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">{h.stockSymbol}</span>
-                                                        <span className="text-xs font-bold text-slate-400 group-hover:text-slate-200 transition-colors">{h.stockName}</span>
+                                                        <span className="symbol-badge w-fit mb-1.5 bg-primary-light text-primary border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">{h.stockSymbol}</span>
+                                                        <span className="text-xs font-bold text-text-muted transition-colors">{h.stockName}</span>
                                                     </div>
                                                 </td>
-                                                <td className="py-5 font-black text-white">{h.quantity}</td>
-                                                <td className="py-5 text-right font-black italic text-white text-lg">₹{h.currentPrice.toLocaleString('en-IN')}</td>
-                                                <td className={`py-5 text-right font-black italic text-lg ${h.pnl >= 0 ? 'text-accent' : 'text-accent-down'}`}>
-                                                    {h.pnl >= 0 ? '+' : ''}₹{h.pnl.toLocaleString('en-IN')}
-                                                    <div className="text-[10px] font-black opacity-60">({h.pnlPercent}%)</div>
+                                                <td className="py-6 font-bold text-text-main">{h.quantity}</td>
+                                                <td className="py-6 text-right font-bold text-text-main text-lg">₹{h.currentPrice.toLocaleString('en-IN')}</td>
+                                                <td className={`py-6 text-right font-bold text-lg ${h.pnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
+                                                    <div className="flex items-center justify-end gap-1">
+                                                        {h.pnl >= 0 ? '+' : ''}₹{h.pnl.toLocaleString('en-IN')}
+                                                    </div>
+                                                    <div className="text-[11px] font-bold opacity-70">({h.pnlPercent}%)</div>
                                                 </td>
                                             </tr>
                                         ))
@@ -128,29 +130,32 @@ const Dashboard = () => {
                     </div>
                 </div>
 
-                <div className="space-y-6">
-                    <div className="glass-card bg-primary/10 border-primary/10 relative overflow-hidden">
-                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/20 rounded-full blur-3xl -mr-16 -mt-16"></div>
-                        <h3 className="text-lg font-black tracking-tight mb-4 flex items-center gap-2">
-                            <TrendingUp className="text-primary" size={20} /> Market Insight
+                <div className="space-y-8">
+                    <div className="glass-card bg-primary/5 border-primary/10 relative overflow-hidden p-8 shadow-indigo-50">
+                        <div className="absolute top-0 right-0 w-32 h-32 bg-primary/5 rounded-full blur-3xl -mr-16 -mt-16"></div>
+                        <h3 className="text-lg font-bold tracking-tight mb-4 flex items-center gap-3 text-text-main">
+                            <Activity className="text-primary" size={20} /> MARKET INSIGHT
                         </h3>
-                        <p className="text-sm text-slate-300 font-medium leading-relaxed">
+                        <p className="text-sm text-text-muted font-medium leading-relaxed">
                             Markets are showing strong momentum in the **infrastructure** sector. Consider reviewing your positions in **Larsen & Toubro** or **NTPC**.
                         </p>
-                        <button className="mt-6 w-full py-3 bg-primary text-white font-black uppercase text-xs tracking-widest rounded-xl hover:brightness-110 active:scale-95 transition-all">
+                        <button className="btn-primary w-full mt-6 py-3 text-sm">
                             Research Sector
                         </button>
                     </div>
 
-                    <div className="glass-card border-accent/10">
-                        <h3 className="text-lg font-black tracking-tight mb-4 flex items-center gap-2 text-accent">
-                            <IndianRupee size={20} /> Portfolio Health
+                    <div className="glass-card border-slate-200 p-8">
+                        <h3 className="text-lg font-bold tracking-tight mb-5 flex items-center gap-3 text-text-main uppercase">
+                            <IndianRupee className="text-accent-up" size={20} /> Portfolio Health
                         </h3>
-                        <div className="space-y-4">
-                            <div className="h-2 bg-white/5 rounded-full overflow-hidden">
-                                <div className="h-full bg-accent rounded-full w-[70%]"></div>
+                        <div className="space-y-5">
+                            <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                                <div className="h-full bg-accent-up rounded-full shadow-lg shadow-emerald-200" style={{ width: '78%' }}></div>
                             </div>
-                            <p className="text-[10px] font-black uppercase tracking-widest text-slate-500">Diversification Score: 78%</p>
+                            <div className="flex justify-between items-center">
+                                <p className="text-[10px] font-bold uppercase tracking-widest text-text-light">Diversification Score</p>
+                                <p className="text-sm font-bold text-accent-up">78%</p>
+                            </div>
                         </div>
                     </div>
                 </div>

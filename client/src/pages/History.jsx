@@ -30,16 +30,16 @@ const History = () => {
         <div className="space-y-10">
             <div className="flex flex-col sm:flex-row justify-between items-end gap-6">
                 <div>
-                    <h1 className="text-4xl font-black tracking-tighter sm:text-5xl italic">Execution Audit</h1>
-                    <p className="text-slate-400 mt-2 font-bold uppercase text-[10px] tracking-[0.3em]">Temporal Ledger of Trades</p>
+                    <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl text-text-main uppercase">Execution Audit</h1>
+                    <p className="text-text-muted mt-2 font-bold uppercase text-[11px] tracking-[0.3em]">Temporal Ledger of Trades</p>
                 </div>
-                <button className="flex items-center gap-2 px-6 py-3 rounded-xl bg-white/5 border border-white/10 text-xs font-black uppercase tracking-widest text-slate-300 hover:text-white hover:bg-white/10 transition-all">
-                    <Download size={16} /> Export CSV
+                <button className="flex items-center gap-3 px-8 py-4 rounded-xl bg-white border border-border-main text-xs font-bold uppercase tracking-widest text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
+                    <Download size={18} /> Export Audit
                 </button>
             </div>
 
-            <div className="glass-card p-2 flex flex-wrap items-center justify-between gap-4 border border-white/5 bg-white/[0.01]">
-                <div className="flex gap-2 p-1">
+            <div className="glass-card p-3 flex flex-wrap items-center justify-between gap-6 border border-border-main bg-white shadow-sm shadow-indigo-50/30">
+                <div className="flex gap-3 px-2">
                     {[
                         { label: 'Comprehensive', value: '', color: 'primary' },
                         { label: 'Purchase Assets', value: 'BUY', color: 'accent' },
@@ -48,60 +48,60 @@ const History = () => {
                         <button
                             key={btn.value}
                             onClick={() => { setType(btn.value); setPage(1); }}
-                            className={`px-6 py-3 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300 
+                            className={`px-8 py-3.5 rounded-xl text-[11px] font-bold uppercase tracking-widest transition-all duration-300 shadow-sm
                 ${type === btn.value
-                                    ? `bg-${btn.color === 'primary' ? 'blue-500' : (btn.color === 'accent' ? 'accent' : 'red-500')} text-white shadow-lg`
-                                    : 'text-slate-500 hover:text-white hover:bg-white/5'}`}
+                                    ? `bg-primary text-white shadow-indigo-200`
+                                    : 'text-text-light hover:text-primary hover:bg-primary-light'}`}
                         >
                             {btn.label}
                         </button>
                     ))}
                 </div>
 
-                <div className="px-6 text-[10px] font-black uppercase tracking-[0.2em] text-slate-600">
-                    Found <span className="text-white">{pagination.total || 0}</span> Recorded Events
+                <div className="px-8 text-[11px] font-bold uppercase tracking-[0.2em] text-text-light border-l border-border-main">
+                    Found <span className="text-text-main font-bold">{pagination.total || 0}</span> Recorded Events
                 </div>
             </div>
 
-            <div className="glass-card p-0 overflow-hidden border border-white/5 shadow-2xl">
+            <div className="glass-card p-0 overflow-hidden border border-border-main shadow-xl shadow-indigo-50/50">
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="text-left text-slate-500 text-[10px] uppercase font-black tracking-[0.2em] border-b border-white/5 bg-white/[0.01]">
-                                <th className="px-8 py-5">Timestamp</th>
-                                <th className="px-8 py-5">Classification</th>
-                                <th className="px-8 py-5">Asset Descriptor</th>
-                                <th className="px-8 py-5">Quantity</th>
-                                <th className="px-8 py-5 text-right">LTP Value</th>
-                                <th className="px-8 py-5 text-right">Gross Total</th>
+                            <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main bg-slate-50/50">
+                                <th className="px-8 py-6">Timestamp</th>
+                                <th className="px-8 py-6">Classification</th>
+                                <th className="px-8 py-6">Asset Descriptor</th>
+                                <th className="px-8 py-6">Quantity</th>
+                                <th className="px-8 py-6 text-right">LTP Value</th>
+                                <th className="px-8 py-6 text-right">Gross Total</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-white/5">
+                        <tbody className="divide-y divide-border-light">
                             {loading ? (
-                                <tr><td colSpan="6" className="px-8 py-16 text-center animate-pulse font-black italic text-slate-500">Retrieving archival data...</td></tr>
+                                <tr><td colSpan="6" className="px-8 py-24 text-center animate-pulse font-bold italic text-text-muted uppercase tracking-widest">Retrieving archival data...</td></tr>
                             ) : trades.length === 0 ? (
-                                <tr><td colSpan="6" className="px-8 py-20 text-center text-slate-500 font-bold italic">No records found for this sector.</td></tr>
+                                <tr><td colSpan="6" className="px-8 py-32 text-center text-text-muted font-bold tracking-tight">No records found for this sector.</td></tr>
                             ) : (
                                 trades.map((t) => (
-                                    <tr key={t._id} className="group hover:bg-white/[0.03] transition-all">
-                                        <td className="px-8 py-6 font-medium">
-                                            <div className="text-white font-black italic">{new Date(t.timestamp).toLocaleDateString()}</div>
-                                            <div className="text-[10px] font-black uppercase text-slate-500 mt-1">{new Date(t.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
+                                    <tr key={t._id} className="group hover:bg-slate-50 transition-all">
+                                        <td className="px-8 py-7 font-medium">
+                                            <div className="text-text-main font-bold italic">{new Date(t.timestamp).toLocaleDateString()}</div>
+                                            <div className="text-[10px] font-bold uppercase text-text-light mt-1.5">{new Date(t.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                                         </td>
-                                        <td className="px-8 py-6">
-                                            <span className={`px-4 py-2 rounded-lg text-[9px] font-black tracking-[0.2em] uppercase 
-                        ${t.type === 'BUY' ? 'bg-accent/10 text-accent border border-accent/20' : 'bg-accent-down/10 text-accent-down border border-accent-down/20'}`}>
+                                        <td className="px-8 py-7">
+                                            <span className={`px-4 py-2 rounded-lg text-[10px] font-bold tracking-[0.1em] uppercase 
+                        ${t.type === 'BUY' ? 'bg-accent-up/10 text-accent-up border border-accent-up/20' : 'bg-accent-down/10 text-accent-down border border-accent-down/20'}`}>
                                                 {t.type === 'BUY' ? 'Invest' : 'Divest'}
                                             </span>
                                         </td>
-                                        <td className="px-8 py-6">
-                                            <span className="font-black text-lg italic text-white group-hover:text-primary transition-colors">{t.stockSymbol}</span>
-                                            <p className="text-[9px] font-black uppercase text-slate-500 truncate max-w-[150px] italic">{t.stockName}</p>
+                                        <td className="px-8 py-7">
+                                            <span className="font-bold text-xl italic text-text-main group-hover:text-primary transition-colors">{t.stockSymbol}</span>
+                                            <p className="text-[10px] font-bold uppercase text-text-light truncate max-w-[150px] italic mt-1">{t.stockName}</p>
                                         </td>
-                                        <td className="px-8 py-6 font-black italic text-slate-300">{t.quantity}</td>
-                                        <td className="px-8 py-6 text-right font-black italic">₹{t.price.toLocaleString('en-IN')}</td>
-                                        <td className="px-8 py-6 text-right">
-                                            <span className="font-black italic text-lg text-white">₹{t.total.toLocaleString('en-IN')}</span>
+                                        <td className="px-8 py-7 font-bold italic text-text-muted">{t.quantity}</td>
+                                        <td className="px-8 py-7 text-right font-bold italic text-text-main">₹{t.price.toLocaleString('en-IN')}</td>
+                                        <td className="px-8 py-7 text-right">
+                                            <span className="font-bold italic text-lg text-text-main">₹{t.total.toLocaleString('en-IN')}</span>
                                         </td>
                                     </tr>
                                 ))
@@ -111,23 +111,23 @@ const History = () => {
                 </div>
 
                 {pagination.pages > 1 && (
-                    <div className="flex justify-center items-center gap-8 p-8 border-t border-white/5 bg-white/[0.01]">
+                    <div className="flex justify-center items-center gap-10 p-10 border-t border-border-main bg-slate-50/30">
                         <button
                             disabled={page === 1}
                             onClick={() => setPage(p => p - 1)}
-                            className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-primary hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none group"
+                            className="p-5 rounded-2xl bg-white border border-border-main hover:bg-primary-light hover:text-primary transition-all disabled:opacity-20 disabled:pointer-events-none group shadow-sm"
                         >
-                            <ChevronLeft size={20} className="group-active:-translate-x-1 transition-transform" />
+                            <ChevronLeft size={24} className="group-active:-translate-x-1 transition-transform" />
                         </button>
-                        <span className="text-xs font-black uppercase tracking-[0.4em] text-slate-400 italic">
-                            Sequence <span className="text-white">{page}</span> / {pagination.pages}
+                        <span className="text-xs font-bold uppercase tracking-[0.4em] text-text-light italic">
+                            ARCHIVE PAGE <span className="text-text-main font-bold">{page}</span> / {pagination.pages}
                         </span>
                         <button
                             disabled={page === pagination.pages}
                             onClick={() => setPage(p => p + 1)}
-                            className="p-4 rounded-2xl bg-white/5 border border-white/10 hover:bg-primary hover:text-white transition-all disabled:opacity-20 disabled:pointer-events-none group"
+                            className="p-5 rounded-2xl bg-white border border-border-main hover:bg-primary-light hover:text-primary transition-all disabled:opacity-20 disabled:pointer-events-none group shadow-sm"
                         >
-                            <ChevronRight size={20} className="group-active:translate-x-1 transition-transform" />
+                            <ChevronRight size={24} className="group-active:translate-x-1 transition-transform" />
                         </button>
                     </div>
                 )}
