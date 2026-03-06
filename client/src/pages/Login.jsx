@@ -16,7 +16,7 @@ const Login = () => {
         setIsLoading(true);
         try {
             await login(email, password);
-            toast.success('Welcome back to Paper Bull!');
+            toast.success('Namaste! Welcome back to Paper Bull.');
             navigate('/');
         } catch (error) {
             toast.error(error.response?.data?.message || 'Login failed. Check your credentials.');
@@ -26,22 +26,28 @@ const Login = () => {
     };
 
     return (
-        <div className="auth-page">
-            <div className="glass-card auth-card fade-in">
-                <div className="flex items-center justify-center gap-3 mb-8 text-center">
-                    <LineChart className="text-accent" size={40} />
-                    <h1 className="text-3xl font-bold">Paper Bull</h1>
+        <div className="min-h-screen flex items-center justify-center bg-bg-dark p-6 relative overflow-hidden">
+            {/* Background Decorative Blobs */}
+            <div className="absolute top-[-10%] right-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[100px]"></div>
+            <div className="absolute bottom-[-10%] left-[-10%] w-[40%] h-[40%] bg-accent/10 rounded-full blur-[100px]"></div>
+
+            <div className="glass-card w-full max-max-w-[420px] p-10 animate-in fade-in zoom-in duration-500 relative z-10">
+                <div className="flex flex-col items-center gap-3 mb-10 text-center">
+                    <div className="bg-primary/20 p-4 rounded-2xl">
+                        <LineChart className="text-primary" size={40} />
+                    </div>
+                    <h1 className="text-3xl font-bold tracking-tighter logo-text">Paper Bull</h1>
+                    <p className="text-slate-400 font-medium">India's Premium Trading Simulator</p>
                 </div>
 
-                <h2 className="text-xl font-semibold mb-6 text-center">Login to your account</h2>
-
-                <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label className="input-label">Email Address</label>
-                        <div className="relative">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-400 ml-1">Email Address</label>
+                        <div className="relative group">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" size={20} />
                             <input
                                 type="email"
-                                className="form-input"
+                                className="form-input pl-12"
                                 placeholder="name@example.com"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
@@ -50,12 +56,13 @@ const Login = () => {
                         </div>
                     </div>
 
-                    <div className="input-group">
-                        <label className="input-label">Password</label>
-                        <div className="relative">
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-400 ml-1">Password</label>
+                        <div className="relative group">
+                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-primary transition-colors" size={20} />
                             <input
                                 type="password"
-                                className="form-input"
+                                className="form-input pl-12"
                                 placeholder="••••••••"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
@@ -66,17 +73,17 @@ const Login = () => {
 
                     <button
                         type="submit"
-                        className="btn-primary w-full mt-4"
+                        className="btn-primary w-full py-4 text-lg mt-4 shadow-xl shadow-primary/20 active:translate-y-0"
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Signing in...' : 'Sign In'}
+                        {isLoading ? 'Signing in...' : 'Sign In Now'}
                     </button>
                 </form>
 
-                <p className="mt-8 text-center text-secondary text-sm">
+                <p className="mt-10 text-center text-slate-500 text-sm font-medium">
                     Don't have an account?{' '}
-                    <Link to="/signup" className="text-primary hover:underline font-semibold">
-                        Create one for free
+                    <Link to="/signup" className="text-primary hover:text-white transition-colors font-bold">
+                        Create free account
                     </Link>
                 </p>
             </div>

@@ -2,41 +2,41 @@ const axios = require('axios');
 
 // Simulated stock data for fallback
 const SIMULATED_STOCKS = {
-    AAPL: { name: 'Apple Inc.', basePrice: 178.50 },
-    GOOGL: { name: 'Alphabet Inc.', basePrice: 141.80 },
-    MSFT: { name: 'Microsoft Corp.', basePrice: 415.20 },
-    AMZN: { name: 'Amazon.com Inc.', basePrice: 185.60 },
-    TSLA: { name: 'Tesla Inc.', basePrice: 245.30 },
-    META: { name: 'Meta Platforms Inc.', basePrice: 505.75 },
-    NVDA: { name: 'NVIDIA Corp.', basePrice: 875.40 },
-    JPM: { name: 'JPMorgan Chase & Co.', basePrice: 198.10 },
-    V: { name: 'Visa Inc.', basePrice: 282.60 },
-    JNJ: { name: 'Johnson & Johnson', basePrice: 156.30 },
-    WMT: { name: 'Walmart Inc.', basePrice: 172.45 },
-    PG: { name: 'Procter & Gamble Co.', basePrice: 162.80 },
-    UNH: { name: 'UnitedHealth Group', basePrice: 527.90 },
-    HD: { name: 'Home Depot Inc.', basePrice: 365.20 },
-    DIS: { name: 'Walt Disney Co.', basePrice: 112.40 },
-    NFLX: { name: 'Netflix Inc.', basePrice: 628.50 },
-    PYPL: { name: 'PayPal Holdings', basePrice: 65.30 },
-    INTC: { name: 'Intel Corp.', basePrice: 31.20 },
-    AMD: { name: 'Advanced Micro Devices', basePrice: 172.80 },
-    CRM: { name: 'Salesforce Inc.', basePrice: 298.40 },
-    BA: { name: 'Boeing Co.', basePrice: 205.10 },
-    UBER: { name: 'Uber Technologies', basePrice: 78.60 },
-    SPOT: { name: 'Spotify Technology', basePrice: 295.30 },
-    SQ: { name: 'Block Inc.', basePrice: 82.40 },
-    SNAP: { name: 'Snap Inc.', basePrice: 11.50 },
-    COIN: { name: 'Coinbase Global', basePrice: 225.80 },
-    PLTR: { name: 'Palantir Technologies', basePrice: 24.60 },
-    ROKU: { name: 'Roku Inc.', basePrice: 68.90 },
-    ZM: { name: 'Zoom Video', basePrice: 65.70 },
-    SHOP: { name: 'Shopify Inc.', basePrice: 78.30 }
+    RELIANCE: { name: 'Reliance Industries Ltd.', basePrice: 2950.50 },
+    TCS: { name: 'Tata Consultancy Services', basePrice: 4120.80 },
+    HDFCBANK: { name: 'HDFC Bank Ltd.', basePrice: 1450.20 },
+    INFY: { name: 'Infosys Ltd.', basePrice: 1620.60 },
+    ICICIBANK: { name: 'ICICI Bank Ltd.', basePrice: 1085.30 },
+    BHARTIARTL: { name: 'Bharti Airtel Ltd.', basePrice: 1215.75 },
+    SBIN: { name: 'State Bank of India', basePrice: 775.40 },
+    LICI: { name: 'Life Insurance Corp.', basePrice: 955.10 },
+    ITC: { name: 'ITC Ltd.', basePrice: 435.60 },
+    HINDUNILVR: { name: 'Hindustan Unilever Ltd.', basePrice: 2420.30 },
+    LT: { name: 'Larsen & Toubro Ltd.', basePrice: 3565.20 },
+    BAJFINANCE: { name: 'Bajaj Finance Ltd.', basePrice: 6650.20 },
+    M_M: { name: 'Mahindra & Mahindra', basePrice: 1950.40 },
+    MARUTI: { name: 'Maruti Suzuki India', basePrice: 11520.40 },
+    SUNPHARMA: { name: 'Sun Pharmaceutical', basePrice: 1560.30 },
+    KOTAKBANK: { name: 'Kotak Mahindra Bank', basePrice: 1720.50 },
+    AXISBANK: { name: 'Axis Bank Ltd.', basePrice: 1085.90 },
+    ADANIENT: { name: 'Adani Enterprises Ltd.', basePrice: 3215.20 },
+    TATAMOTORS: { name: 'Tata Motors Ltd.', basePrice: 980.10 },
+    WIPRO: { name: 'Wipro Ltd.', basePrice: 512.40 },
+    ASIANPAINT: { name: 'Asian Paints Ltd.', basePrice: 2850.30 },
+    TITAN: { name: 'Titan Company Ltd.', basePrice: 3625.60 },
+    HCLTECH: { name: 'HCL Technologies Ltd.', basePrice: 1512.80 },
+    ONGC: { name: 'ONGC Ltd.', basePrice: 275.30 },
+    NTPC: { name: 'NTPC Ltd.', basePrice: 345.10 },
+    JSWSTEEL: { name: 'JSW Steel Ltd.', basePrice: 825.80 },
+    POWERGRID: { name: 'Power Grid Corp.', basePrice: 285.60 },
+    ADANIPORTS: { name: 'Adani Ports & SEZ', basePrice: 1285.30 },
+    GRASIM: { name: 'Grasim Industries Ltd.', basePrice: 2212.70 },
+    ULTRACEMCO: { name: 'UltraTech Cement Ltd.', basePrice: 9850.30 }
 };
 
 // Generate a realistic random price fluctuation
 function fluctuate(basePrice) {
-    const change = (Math.random() - 0.48) * basePrice * 0.03;
+    const change = (Math.random() - 0.49) * basePrice * 0.02; // Slightly less volatile for Indian markets
     return Math.round((basePrice + change) * 100) / 100;
 }
 
@@ -49,14 +49,14 @@ function generateIntradayData(symbol) {
     let price = stock.basePrice;
     const now = new Date();
 
-    // Generate 78 five-minute candles (6.5 hours trading day)
-    for (let i = 77; i >= 0; i--) {
+    // Generate 75 five-minute candles (6.25 hours trading day - Indian Market 9:15 to 3:30)
+    for (let i = 74; i >= 0; i--) {
         const time = new Date(now.getTime() - i * 5 * 60 * 1000);
         const open = price;
         const close = fluctuate(price);
-        const high = Math.max(open, close) * (1 + Math.random() * 0.005);
-        const low = Math.min(open, close) * (1 - Math.random() * 0.005);
-        const volume = Math.floor(Math.random() * 500000) + 50000;
+        const high = Math.max(open, close) * (1 + Math.random() * 0.003);
+        const low = Math.min(open, close) * (1 - Math.random() * 0.003);
+        const volume = Math.floor(Math.random() * 300000) + 10000;
 
         data.push({
             timestamp: time.toISOString(),
@@ -71,15 +71,18 @@ function generateIntradayData(symbol) {
     return data;
 }
 
-// Try Alpha Vantage, fall back to simulated
+// Simulated fallback for Indian stocks (Alpha Vantage has limited support for NSE/BSE)
 async function getQuote(symbol) {
     const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
-    const upperSymbol = symbol.toUpperCase();
+    let upperSymbol = symbol.toUpperCase();
+
+    // Handle common NSE symbols if passed without suffix
+    const nseSymbol = upperSymbol.endsWith('.BSE') || upperSymbol.endsWith('.NSE') ? upperSymbol : `${upperSymbol}.NSE`;
 
     // Try Alpha Vantage if key is present
     if (apiKey && apiKey !== 'your_alpha_vantage_api_key_here') {
         try {
-            const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${upperSymbol}&apikey=${apiKey}`;
+            const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${nseSymbol}&apikey=${apiKey}`;
             const { data } = await axios.get(url, { timeout: 5000 });
             const quote = data['Global Quote'];
             if (quote && quote['05. price']) {
@@ -96,13 +99,11 @@ async function getQuote(symbol) {
                     simulated: false
                 };
             }
-        } catch (err) {
-            // Fall through to simulated
-        }
+        } catch (err) { }
     }
 
     // Simulated fallback
-    const stock = SIMULATED_STOCKS[upperSymbol];
+    const stock = SIMULATED_STOCKS[upperSymbol] || SIMULATED_STOCKS[upperSymbol.replace('.NSE', '')];
     if (!stock) return null;
 
     const price = fluctuate(stock.basePrice);
@@ -116,9 +117,9 @@ async function getQuote(symbol) {
         price,
         change,
         changePercent,
-        high: Math.round(Math.max(price, prevClose) * 1.005 * 100) / 100,
-        low: Math.round(Math.min(price, prevClose) * 0.995 * 100) / 100,
-        volume: Math.floor(Math.random() * 10000000) + 1000000,
+        high: Math.round(Math.max(price, prevClose) * 1.004 * 100) / 100,
+        low: Math.round(Math.min(price, prevClose) * 0.996 * 100) / 100,
+        volume: Math.floor(Math.random() * 5000000) + 500000,
         previousClose: prevClose,
         simulated: true
     };

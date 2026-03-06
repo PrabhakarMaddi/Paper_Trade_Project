@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import { toast } from 'react-hot-toast';
-import { LineChart } from 'lucide-react';
+import { LineChart, User, Mail, Lock } from 'lucide-react';
 
 const Signup = () => {
     const [name, setName] = useState('');
@@ -17,7 +17,7 @@ const Signup = () => {
         setIsLoading(true);
         try {
             await register(name, email, password);
-            toast.success('Account created! Welcome to Paper Bull.');
+            toast.success('Account created! Welcome to Paper Bull India.');
             navigate('/');
         } catch (error) {
             toast.error(error.response?.data?.message || 'Registration failed.');
@@ -27,66 +27,80 @@ const Signup = () => {
     };
 
     return (
-        <div className="auth-page">
-            <div className="glass-card auth-card fade-in">
-                <div className="flex items-center justify-center gap-3 mb-8 text-center">
-                    <LineChart className="text-accent" size={40} />
-                    <h1 className="text-3xl font-bold">Paper Bull</h1>
+        <div className="min-h-screen flex items-center justify-center bg-bg-dark p-6 relative overflow-hidden">
+            {/* Background Decorative Blobs */}
+            <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-primary/10 rounded-full blur-[100px]"></div>
+            <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] bg-accent/10 rounded-full blur-[100px]"></div>
+
+            <div className="glass-card w-full max-w-[420px] p-10 animate-in fade-in zoom-in duration-500 relative z-10">
+                <div className="flex flex-col items-center gap-3 mb-10 text-center">
+                    <div className="bg-accent/20 p-4 rounded-2xl">
+                        <LineChart className="text-accent" size={40} />
+                    </div>
+                    <h1 className="text-3xl font-bold tracking-tighter logo-text">Paper Bull</h1>
+                    <p className="text-slate-400 font-medium">Start your trading journey today</p>
                 </div>
 
-                <h2 className="text-xl font-semibold mb-6 text-center">Start paper trading today</h2>
-
-                <form onSubmit={handleSubmit}>
-                    <div className="input-group">
-                        <label className="input-label">Full Name</label>
-                        <input
-                            type="text"
-                            className="form-input"
-                            placeholder="John Doe"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)}
-                            required
-                        />
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-400 ml-1">Full Name</label>
+                        <div className="relative group">
+                            <User className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-accent transition-colors" size={20} />
+                            <input
+                                type="text"
+                                className="form-input pl-12 focus:border-accent"
+                                placeholder="Rahul Sharma"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div className="input-group">
-                        <label className="input-label">Email Address</label>
-                        <input
-                            type="email"
-                            className="form-input"
-                            placeholder="name@example.com"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            required
-                        />
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-400 ml-1">Email Address</label>
+                        <div className="relative group">
+                            <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-accent transition-colors" size={20} />
+                            <input
+                                type="email"
+                                className="form-input pl-12 focus:border-accent"
+                                placeholder="rahul@example.com"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div className="input-group">
-                        <label className="input-label">Password</label>
-                        <input
-                            type="password"
-                            className="form-input"
-                            placeholder="Min. 6 characters"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                            minLength={6}
-                        />
+                    <div className="space-y-2">
+                        <label className="text-sm font-semibold text-slate-400 ml-1">Password</label>
+                        <div className="relative group">
+                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-accent transition-colors" size={20} />
+                            <input
+                                type="password"
+                                className="form-input pl-12 focus:border-accent"
+                                placeholder="Min. 6 characters"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                                minLength={6}
+                            />
+                        </div>
                     </div>
 
                     <button
                         type="submit"
-                        className="btn-primary w-full mt-4"
+                        className="btn-accent w-full py-4 text-lg mt-4 shadow-xl shadow-accent/20 active:translate-y-0"
                         disabled={isLoading}
                     >
-                        {isLoading ? 'Creating account...' : 'Create Account'}
+                        {isLoading ? 'Creating account...' : 'Get Started Now'}
                     </button>
                 </form>
 
-                <p className="mt-8 text-center text-secondary text-sm">
+                <p className="mt-10 text-center text-slate-500 text-sm font-medium">
                     Already have an account?{' '}
-                    <Link to="/login" className="text-primary hover:underline font-semibold">
-                        Sign in
+                    <Link to="/login" className="text-accent hover:text-white transition-colors font-bold">
+                        Sign in here
                     </Link>
                 </p>
             </div>

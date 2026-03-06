@@ -1,32 +1,33 @@
-# 🐂 Paper Bull - Full-Stack Paper Trading Platform
+# 🐂 Paper Bull (Indian Markets) - Full-Stack Paper Trading Platform
 
-A premium stock market paper trading platform where users can practice trading with virtual money ($100,000) using real-time or simulated stock prices.
+A premium Indian stock market paper trading platform where users can practice trading with virtual money (**₹10,00,000**) using NSE/BSE stock data.
 
 ## 🚀 Teck Stack
-- **Frontend**: React, Vite, Recharts, Lucide, Axios
+- **Frontend**: React, Vite, **Tailwind CSS**, Recharts, Lucide
 - **Backend**: Node.js, Express, JWT, Mongoose
 - **Database**: MongoDB
-- **Styling**: Vanilla CSS (Custom Design System, Dark Mode)
+- **Styling**: Tailwind CSS (Refined Fintech Design System, Dark Mode)
 - **Deployment**: Docker, Docker Compose
 
 ## ✨ Core Features
 - **User Authentication**: Secure JWT-based Signup/Login/Logout.
-- **Virtual Wallet**: Start with $100,000 virtual balance.
-- **Trade Execution**: Real-time buy/sell with balance and holdings validation.
-- **Portfolio Management**: Track holdings, average cost, market value, and unrealized P&L.
-- **Dynamic Charts**: Intraday candlestick charts for technical analysis.
-- **Global Leaderboard**: Compete with other users based on net worth.
-- **Modern UI**: Full dark/light mode support with professional fintech aesthetics.
+- **Virtual Wallet**: Start with **₹10 Lakhs** virtual balance.
+- **NSE/BSE Integration**: NIFTY 50 stock data and simulated execution.
+- **Trade Execution**: Indian market-specific buy/sell logic (9:15 AM - 3:30 PM simulation).
+- **Portfolio Management**: Track holdings, average cost, MTM, and unrealized P&L in Rupee (₹).
+- **Dynamic Charts**: Intraday area charts for technical analysis.
+- **Global Leaderboard**: Compete with other Indian traders based on net worth.
+- **Modern UI**: Luxury "Elite Trader" aesthetic with Tailwind CSS and full Dark Mode support.
 
 ## 🛠️ Setup Instructions
 
 ### Prerequisites
 - Node.js (v18+)
 - MongoDB (Local or Atlas)
-- Docker (Optional, for containerized setup)
+- Docker (Optional)
 
 ### Environment Configuration
-Create a `.env` file in the `server` directory based on `.env.example`:
+Create a `.env` file in the `server` directory:
 ```env
 PORT=5000
 MONGO_URI=mongodb://localhost:27017/paperbull
@@ -34,7 +35,7 @@ JWT_SECRET=your_jwt_secret_key_here
 ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key_here
 ```
 > [!NOTE]
-> If `ALPHA_VANTAGE_API_KEY` is not provided, the app will automatically fall back to simulated prices using a random-walk algorithm for 30 popular stocks.
+> The app is pre-configured with **NIFTY 50** mock data (Reliance, TCS, HDFC Bank, etc.) as a fallback for any stock symbol.
 
 ### Local Installation
 
@@ -48,7 +49,7 @@ ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key_here
    ```bash
    cd server
    npm install
-   npm dev
+   npm run dev
    ```
 
 3. **Frontend Setup**:
@@ -59,17 +60,11 @@ ALPHA_VANTAGE_API_KEY=your_alpha_vantage_api_key_here
    ```
    Open [http://localhost:3000](http://localhost:3000) in your browser.
 
-### Docker Setup
-Run the following command in the root directory:
+## 📦 Docker Deployment
 ```bash
 docker-compose up --build
 ```
 The app will be available at [http://localhost](http://localhost).
-
-## 📊 Database Schema
-- **Users**: `id, name, email, password, balance`
-- **Trades**: `id, userId, stockSymbol, quantity, price, type, timestamp`
-- **Portfolio**: `userId, stockSymbol, quantity, avgPrice`
 
 ## 🛡️ License
 MIT

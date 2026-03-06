@@ -25,8 +25,9 @@ router.get('/', async (req, res) => {
                 }
 
                 const netWorth = Math.round((user.balance + portfolioValue) * 100) / 100;
-                const totalReturn = Math.round((netWorth - 100000) * 100) / 100;
-                const returnPercent = ((totalReturn / 100000) * 100).toFixed(2);
+                const startingBalance = 1000000; // Updated to 10 Lakhs for Indian Context
+                const totalReturn = Math.round((netWorth - startingBalance) * 100) / 100;
+                const returnPercent = ((totalReturn / startingBalance) * 100).toFixed(2);
 
                 return {
                     name: user.name,
