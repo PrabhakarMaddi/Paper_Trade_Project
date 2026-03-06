@@ -30,6 +30,29 @@
     --font-outfit: "Outfit", sans-serif;
 }
 
+:root.dark {
+    /* Refined Dark Base Colors (Zinc/Greyish) */
+    --color-bg-main: #09090b;
+    --color-bg-white: #101014;
+    --color-bg-card: #101014;
+    --color-bg-sidebar: #09090b;
+
+    /* Brand Colors - Adjusted for Dark mode */
+    --color-primary-light: #1e1b4b;
+
+    /* Text - High Contrast Dark Palette */
+    --color-text-main: #fafafa;
+    --color-text-muted: #a1a1aa;
+    --color-text-light: #71717a;
+
+    /* Borders - Refined Dark Palette */
+    --color-border-main: #27272a;
+    --color-border-light: #18181b;
+
+    /* Shadow Overrides for Dark Mode */
+    --shadow-premium: 0 10px 15px -3px rgba(0, 0, 0, 0.5);
+}
+
 @layer base {
     body {
         @apply bg-bg-main text-text-main font-inter antialiased transition-colors duration-300;
@@ -47,7 +70,13 @@
 
     /* Premium White Card */
     .glass-card {
-        @apply bg-bg-white border border-border-main rounded-2xl p-8 shadow-sm transition-all duration-300 hover:shadow-xl hover:border-primary/20;
+        @apply bg-bg-white border border-border-main rounded-2xl p-8 transition-all duration-300;
+        box-shadow: var(--shadow-premium, 0 10px 15px -3px rgba(79, 70, 229, 0.05));
+    }
+
+    .glass-card:hover {
+        @apply border-primary/20;
+        box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
     }
 
     /* Buttons */
@@ -61,7 +90,7 @@
 
     /* Inputs */
     .form-input {
-        @apply w-full bg-white border border-border-main rounded-xl px-4 py-3 text-text-main outline-none transition-all duration-200 placeholder:text-text-light focus:border-primary focus:ring-4 focus:ring-primary/5;
+        @apply w-full bg-bg-card border border-border-main rounded-xl px-4 py-3 text-text-main outline-none transition-all duration-200 placeholder:text-text-light focus:border-primary focus:ring-4 focus:ring-primary/5;
     }
 
     /* Navigation */

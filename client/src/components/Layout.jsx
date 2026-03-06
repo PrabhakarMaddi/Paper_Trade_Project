@@ -19,7 +19,7 @@ const Layout = () => {
                     <div className="flex items-center gap-4">
                         <button
                             onClick={toggleTheme}
-                            className="p-2 rounded-xl bg-slate-100 border border-slate-200 text-text-muted hover:text-primary hover:bg-primary-light transition-all"
+                            className="p-2 rounded-xl bg-bg-main border border-border-main text-text-muted hover:text-primary hover:bg-primary-light transition-all"
                         >
                             {dark ? <Sun size={20} /> : <Moon size={20} />}
                         </button>

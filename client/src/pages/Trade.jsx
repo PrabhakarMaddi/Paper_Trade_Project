@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from '../api/axios';
-import { Search, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, IndianRupee } from 'lucide-react';
+import { Search, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, IndianRupee, Activity } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import StockChart from '../components/StockChart';
 
@@ -68,7 +68,7 @@ const Trade = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div className="lg:col-span-2 space-y-10">
                     {/* Search Box */}
-                    <div className="bg-white border-2 border-primary/20 rounded-2xl shadow-lg shadow-indigo-100/50 overflow-hidden focus-within:border-primary transition-all">
+                    <div className="bg-bg-card border-2 border-primary/20 rounded-2xl shadow-lg shadow-indigo-100/10 overflow-hidden focus-within:border-primary transition-all">
                         <div className="flex items-center p-6 gap-5">
                             <Search className="text-primary" size={28} />
                             <input
@@ -80,11 +80,11 @@ const Trade = () => {
                             />
                         </div>
                         {results.length > 0 && (
-                            <div className="border-t border-border-main divide-y divide-border-light bg-slate-50/50">
+                            <div className="border-t border-border-main divide-y divide-border-light bg-bg-main/50">
                                 {results.map((r) => (
                                     <div
                                         key={r.symbol}
-                                        className="p-6 hover:bg-white cursor-pointer flex justify-between items-center group transition-all"
+                                        className="p-6 hover:bg-bg-card cursor-pointer flex justify-between items-center group transition-all"
                                         onClick={() => handleSelect(r.symbol)}
                                     >
                                         <div>
@@ -118,7 +118,7 @@ const Trade = () => {
                                         </div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-right max-md:text-left bg-slate-50 p-6 rounded-2xl border border-border-main">
+                                <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-right max-md:text-left bg-bg-main p-6 rounded-2xl border border-border-main">
                                     <div>
                                         <p className="text-[10px] font-bold uppercase tracking-widest text-text-light">Prev Close</p>
                                         <p className="font-bold text-text-main">₹{quote.previousClose.toLocaleString('en-IN')}</p>
@@ -140,8 +140,8 @@ const Trade = () => {
                             <StockChart symbol={selectedStock} />
                         </div>
                     ) : (
-                        <div className="glass-card h-[450px] flex flex-col items-center justify-center text-center bg-slate-50/50 border-dashed border-2 border-slate-200 shadow-none">
-                            <div className="w-24 h-24 bg-white rounded-2xl shadow-sm border border-slate-100 flex items-center justify-center mb-6">
+                        <div className="glass-card h-[450px] flex flex-col items-center justify-center text-center bg-bg-main/50 border-dashed border-2 border-border-main shadow-none">
+                            <div className="w-24 h-24 bg-bg-card rounded-2xl shadow-sm border border-border-light flex items-center justify-center mb-6">
                                 <Activity size={48} className="text-primary/30" />
                             </div>
                             <p className="text-2xl font-bold tracking-tight text-text-muted">Select an asset to analyze</p>
@@ -153,10 +153,10 @@ const Trade = () => {
                 {/* Action Panel */}
                 <div className="space-y-8">
                     {selectedStock && quote ? (
-                        <div className="glass-card sticky top-24 border-primary/20 animate-in fade-in slide-in-from-right-4 duration-500 p-8 shadow-indigo-100">
+                        <div className="glass-card sticky top-24 border-primary/20 animate-in fade-in slide-in-from-right-4 duration-500 p-8">
                             <h3 className="text-2xl font-bold tracking-tight mb-8 text-text-main uppercase">Execute Order</h3>
                             <div className="space-y-8">
-                                <div className="flex justify-between items-center bg-slate-50 p-4 rounded-xl border border-border-main">
+                                <div className="flex justify-between items-center bg-bg-main p-4 rounded-xl border border-border-main">
                                     <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Market Price</span>
                                     <span className="text-2xl font-bold text-primary">₹{quote.price.toLocaleString('en-IN')}</span>
                                 </div>
@@ -167,7 +167,7 @@ const Trade = () => {
                                         <input
                                             type="number"
                                             min="1"
-                                            className="form-input text-3xl font-bold py-6 bg-white border-2 border-border-main focus:border-primary h-24 text-center rounded-2xl"
+                                            className="form-input text-3xl font-bold py-6 bg-bg-card border-2 border-border-main focus:border-primary h-24 text-center rounded-2xl"
                                             value={quantity}
                                             onChange={(e) => setQuantity(e.target.value)}
                                         />
@@ -177,7 +177,7 @@ const Trade = () => {
                                             <button
                                                 key={val}
                                                 onClick={() => setQuantity(val)}
-                                                className="px-3 py-1.5 bg-slate-100 hover:bg-primary-light hover:text-primary rounded-lg text-xs font-bold text-text-muted transition-all"
+                                                className="px-3 py-1.5 bg-bg-main hover:bg-primary-light hover:text-primary rounded-lg text-xs font-bold text-text-muted transition-all"
                                             >
                                                 {val}x
                                             </button>
@@ -213,7 +213,7 @@ const Trade = () => {
                             </div>
                         </div>
                     ) : (
-                        <div className="glass-card bg-indigo-50/50 border-primary/10 p-10 shadow-none">
+                        <div className="glass-card bg-bg-main/50 border-primary/10 p-10 shadow-none">
                             <div className="flex flex-col items-center text-center gap-6">
                                 <div className="p-4 bg-primary/10 rounded-2xl">
                                     <IndianRupee className="text-primary" size={32} />
@@ -229,7 +229,7 @@ const Trade = () => {
                                         <span>Risk Profile</span>
                                         <span className="text-primary">Balanced</span>
                                     </div>
-                                    <div className="h-1.5 bg-slate-200 rounded-full">
+                                    <div className="h-1.5 bg-border-main rounded-full">
                                         <div className="h-full bg-primary rounded-full w-[60%]"></div>
                                     </div>
                                 </div>

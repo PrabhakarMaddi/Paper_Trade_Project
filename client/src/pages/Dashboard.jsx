@@ -37,7 +37,7 @@ const Dashboard = () => {
                     <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl text-text-main uppercase">Dashboard</h1>
                     <p className="text-text-muted mt-2 font-medium">Welcome back! Here's your market performance today.</p>
                 </div>
-                <div className="bg-white border border-border-main px-8 py-4 rounded-2xl flex items-center gap-6 shadow-sm shadow-indigo-50/50">
+                <div className="bg-bg-card border border-border-main px-8 py-4 rounded-2xl flex items-center gap-6 shadow-sm shadow-indigo-50/10">
                     <div className="text-right">
                         <p className="text-[10px] uppercase font-bold text-text-light tracking-[0.2em] mb-1">Net Worth</p>
                         <p className="text-3xl font-bold text-text-main">₹{summary.netWorth.toLocaleString('en-IN')}</p>
@@ -106,7 +106,7 @@ const Dashboard = () => {
                                         </tr>
                                     ) : (
                                         holdings.slice(0, 5).map((h) => (
-                                            <tr key={h.stockSymbol} className="group hover:bg-slate-50 transition-colors">
+                                            <tr key={h.stockSymbol} className="group hover:bg-bg-main transition-colors">
                                                 <td className="py-6">
                                                     <div className="flex flex-col">
                                                         <span className="symbol-badge w-fit mb-1.5 bg-primary-light text-primary border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">{h.stockSymbol}</span>
@@ -144,12 +144,12 @@ const Dashboard = () => {
                         </button>
                     </div>
 
-                    <div className="glass-card border-slate-200 p-8">
+                    <div className="glass-card border-border-main p-8">
                         <h3 className="text-lg font-bold tracking-tight mb-5 flex items-center gap-3 text-text-main uppercase">
                             <IndianRupee className="text-accent-up" size={20} /> Portfolio Health
                         </h3>
                         <div className="space-y-5">
-                            <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+                            <div className="h-2.5 bg-border-light rounded-full overflow-hidden">
                                 <div className="h-full bg-accent-up rounded-full shadow-lg shadow-emerald-200" style={{ width: '78%' }}></div>
                             </div>
                             <div className="flex justify-between items-center">

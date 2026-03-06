@@ -64,7 +64,7 @@ const Leaderboard = () => {
             </div>
 
             <div className="glass-card p-0 overflow-hidden border border-border-main shadow-2xl max-w-[950px] mx-auto">
-                <div className="bg-slate-50 px-10 py-6 border-b border-border-main flex items-center justify-between">
+                <div className="bg-bg-main px-10 py-6 border-b border-border-main flex items-center justify-between">
                     <h3 className="font-bold text-lg tracking-tight text-text-main uppercase">Cumulative Rankings</h3>
                     <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest">
                         <Star className="text-yellow-500 fill-yellow-500" size={18} /> Market Leaders
@@ -72,13 +72,13 @@ const Leaderboard = () => {
                 </div>
                 <div className="divide-y divide-border-light">
                     {users.map((user, index) => (
-                        <div key={user.name} className="px-10 py-7 flex items-center justify-between group hover:bg-slate-50 transition-all">
+                        <div key={user.name} className="px-10 py-7 flex items-center justify-between group hover:bg-bg-main transition-all">
                             <div className="flex items-center gap-10">
                                 <span className={`w-10 font-bold text-3xl tracking-tighter ${index < 3 ? 'text-primary' : 'text-text-light'}`}>
                                     {index + 1 < 10 ? `0${index + 1}` : index + 1}
                                 </span>
                                 <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-slate-100 flex items-center justify-center font-bold text-primary border border-slate-200 uppercase">
+                                    <div className="w-12 h-12 rounded-full bg-border-light flex items-center justify-center font-bold text-primary border border-border-main uppercase">
                                         {user.name.charAt(0)}
                                     </div>
                                     <div>

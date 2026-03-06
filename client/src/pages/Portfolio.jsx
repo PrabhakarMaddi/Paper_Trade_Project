@@ -50,8 +50,8 @@ const Portfolio = () => {
                     { label: 'Realized/Unrealized P&L', value: summary.totalPnl, icon: <TrendingUp size={18} />, status: true },
                     { label: 'Cumulative Yield %', value: summary.totalPnlPercent, icon: <PieChartIcon size={18} />, status: true, isPercent: true }
                 ].map((stat, i) => (
-                    <div key={i} className="glass-card group overflow-hidden relative border-slate-100 shadow-sm hover:shadow-md transition-all">
-                        <div className="absolute top-0 right-0 w-20 h-20 bg-slate-50 rotate-12 -mr-10 -mt-10 transition-all group-hover:bg-primary-light/50"></div>
+                    <div key={i} className="glass-card group overflow-hidden relative border-border-main shadow-sm hover:shadow-md transition-all">
+                        <div className="absolute top-0 right-0 w-20 h-20 bg-bg-main rotate-12 -mr-10 -mt-10 transition-all group-hover:bg-primary-light/50"></div>
                         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-muted mb-3 flex items-center gap-2">
                             {stat.icon} {stat.label}
                         </p>
@@ -63,15 +63,15 @@ const Portfolio = () => {
                 ))}
             </div>
 
-            <div className="glass-card p-0 overflow-hidden border border-border-main shadow-lg shadow-indigo-50/50">
-                <div className="bg-slate-50 px-8 py-5 border-b border-border-main flex items-center justify-between">
+            <div className="glass-card p-0 overflow-hidden border border-border-main shadow-lg shadow-indigo-50/10">
+                <div className="bg-bg-main px-8 py-5 border-b border-border-main flex items-center justify-between">
                     <h3 className="font-bold text-text-main uppercase tracking-tight">Active Positions</h3>
-                    <span className="text-[11px] font-bold uppercase tracking-widest text-text-muted px-3 py-1 bg-white rounded-full border border-border-main">{holdings.length} Positions</span>
+                    <span className="text-[11px] font-bold uppercase tracking-widest text-text-muted px-3 py-1 bg-bg-card rounded-full border border-border-main">{holdings.length} Positions</span>
                 </div>
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main bg-slate-50/30">
+                            <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main bg-bg-main/30">
                                 <th className="px-8 py-5">Asset Identification</th>
                                 <th className="px-8 py-5">Position Size</th>
                                 <th className="px-8 py-5 text-right">Acquisition</th>
@@ -84,8 +84,8 @@ const Portfolio = () => {
                                 <tr>
                                     <td colSpan="5" className="px-8 py-24 text-center text-text-muted font-bold">
                                         <div className="flex flex-col items-center gap-6">
-                                            <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center border border-slate-100 shadow-inner">
-                                                <TrendingUp size={42} className="text-slate-200" />
+                                            <div className="w-20 h-20 bg-bg-main rounded-full flex items-center justify-center border border-border-light shadow-inner">
+                                                <TrendingUp size={42} className="text-text-light/20" />
                                             </div>
                                             <div>
                                                 <p className="text-2xl text-text-main tracking-tight">Zero Exposure Detected</p>
@@ -96,7 +96,7 @@ const Portfolio = () => {
                                 </tr>
                             ) : (
                                 holdings.map((h) => (
-                                    <tr key={h.stockSymbol} className="group hover:bg-slate-50 transition-all">
+                                    <tr key={h.stockSymbol} className="group hover:bg-bg-main transition-all">
                                         <td className="px-8 py-7">
                                             <div className="flex flex-col">
                                                 <span className="symbol-badge w-fit mb-2 bg-primary-light text-primary border-primary/10 group-hover:bg-primary group-hover:text-white transition-all duration-300">

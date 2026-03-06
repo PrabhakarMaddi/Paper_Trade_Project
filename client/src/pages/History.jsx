@@ -33,12 +33,12 @@ const History = () => {
                     <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl text-text-main uppercase">Execution Audit</h1>
                     <p className="text-text-muted mt-2 font-bold uppercase text-[11px] tracking-[0.3em]">Temporal Ledger of Trades</p>
                 </div>
-                <button className="flex items-center gap-3 px-8 py-4 rounded-xl bg-white border border-border-main text-xs font-bold uppercase tracking-widest text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
+                <button className="flex items-center gap-3 px-8 py-4 rounded-xl bg-bg-card border border-border-main text-xs font-bold uppercase tracking-widest text-text-muted hover:text-primary hover:border-primary transition-all shadow-sm">
                     <Download size={18} /> Export Audit
                 </button>
             </div>
 
-            <div className="glass-card p-3 flex flex-wrap items-center justify-between gap-6 border border-border-main bg-white shadow-sm shadow-indigo-50/30">
+            <div className="glass-card p-3 flex flex-wrap items-center justify-between gap-6 border border-border-main bg-bg-card shadow-sm shadow-indigo-50/10">
                 <div className="flex gap-3 px-2">
                     {[
                         { label: 'Comprehensive', value: '', color: 'primary' },
@@ -67,7 +67,7 @@ const History = () => {
                 <div className="overflow-x-auto">
                     <table className="w-full">
                         <thead>
-                            <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main bg-slate-50/50">
+                            <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main bg-bg-main/50">
                                 <th className="px-8 py-6">Timestamp</th>
                                 <th className="px-8 py-6">Classification</th>
                                 <th className="px-8 py-6">Asset Descriptor</th>
@@ -83,7 +83,7 @@ const History = () => {
                                 <tr><td colSpan="6" className="px-8 py-32 text-center text-text-muted font-bold tracking-tight">No records found for this sector.</td></tr>
                             ) : (
                                 trades.map((t) => (
-                                    <tr key={t._id} className="group hover:bg-slate-50 transition-all">
+                                    <tr key={t._id} className="group hover:bg-bg-main transition-all">
                                         <td className="px-8 py-7 font-medium">
                                             <div className="text-text-main font-bold italic">{new Date(t.timestamp).toLocaleDateString()}</div>
                                             <div className="text-[10px] font-bold uppercase text-text-light mt-1.5">{new Date(t.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
@@ -111,11 +111,11 @@ const History = () => {
                 </div>
 
                 {pagination.pages > 1 && (
-                    <div className="flex justify-center items-center gap-10 p-10 border-t border-border-main bg-slate-50/30">
+                    <div className="flex justify-center items-center gap-10 p-10 border-t border-border-main bg-bg-main/30">
                         <button
                             disabled={page === 1}
                             onClick={() => setPage(p => p - 1)}
-                            className="p-5 rounded-2xl bg-white border border-border-main hover:bg-primary-light hover:text-primary transition-all disabled:opacity-20 disabled:pointer-events-none group shadow-sm"
+                            className="p-5 rounded-2xl bg-bg-card border border-border-main hover:bg-primary-light hover:text-primary transition-all disabled:opacity-20 disabled:pointer-events-none group shadow-sm"
                         >
                             <ChevronLeft size={24} className="group-active:-translate-x-1 transition-transform" />
                         </button>
@@ -125,7 +125,7 @@ const History = () => {
                         <button
                             disabled={page === pagination.pages}
                             onClick={() => setPage(p => p + 1)}
-                            className="p-5 rounded-2xl bg-white border border-border-main hover:bg-primary-light hover:text-primary transition-all disabled:opacity-20 disabled:pointer-events-none group shadow-sm"
+                            className="p-5 rounded-2xl bg-bg-card border border-border-main hover:bg-primary-light hover:text-primary transition-all disabled:opacity-20 disabled:pointer-events-none group shadow-sm"
                         >
                             <ChevronRight size={24} className="group-active:translate-x-1 transition-transform" />
                         </button>

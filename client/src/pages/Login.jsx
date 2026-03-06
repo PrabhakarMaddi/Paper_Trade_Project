@@ -31,7 +31,7 @@ const Login = () => {
             <div className="absolute top-[-5%] right-[-5%] w-[30%] h-[30%] bg-primary/5 rounded-full blur-[80px]"></div>
             <div className="absolute bottom-[-5%] left-[-5%] w-[30%] h-[30%] bg-accent-up/5 rounded-full blur-[80px]"></div>
 
-            <div className="glass-card w-full max-w-[440px] animate-in fade-in zoom-in duration-500 relative z-10 shadow-2xl shadow-indigo-100">
+            <div className="glass-card w-full max-w-[440px] animate-in fade-in zoom-in duration-500 relative z-10">
                 <div className="flex flex-col items-center gap-4 mb-10 text-center">
                     <div className="bg-primary/10 p-4 rounded-2xl shadow-inner">
                         <LineChart className="text-primary" size={42} />
@@ -43,7 +43,7 @@ const Login = () => {
                 </div>
 
                 <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-center text-text-main mb-2">Welcome Back</h2>
+                    <h2 className="text-2xl font-bold text-center text-text-main ">Welcome Trader</h2>
 
                     <form onSubmit={handleSubmit} className="space-y-5">
                         <div className="space-y-1.5">
@@ -78,7 +78,7 @@ const Login = () => {
 
                         <button
                             type="submit"
-                            className="btn-primary w-full py-4 text-lg mt-4 shadow-xl shadow-indigo-200 active:translate-y-0"
+                            className="btn-primary w-full py-4 text-lg mt-4 active:translate-y-0"
                             disabled={isLoading}
                         >
                             {isLoading ? 'Authenticating...' : 'Sign In to Account'}
@@ -90,7 +90,7 @@ const Login = () => {
                             <div className="w-full border-t border-border-main"></div>
                         </div>
                         <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-bg-white px-2 text-text-light font-bold">New to Paper Bull?</span>
+                            <span className="bg-bg-main px-2 text-text-light font-bold">New to Paper Bull?</span>
                         </div>
                     </div>
 

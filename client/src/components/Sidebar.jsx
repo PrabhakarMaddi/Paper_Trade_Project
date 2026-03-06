@@ -37,7 +37,7 @@ const Sidebar = () => {
               flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 font-bold
               ${isActive
                                 ? 'bg-primary-light text-primary border-r-4 border-primary rounded-r-none'
-                                : 'text-text-muted hover:bg-slate-50 hover:text-primary'}
+                                : 'text-text-muted hover:bg-bg-main hover:text-primary'}
               max-lg:justify-center
             `}
                     >
