@@ -43,7 +43,7 @@ export default function Register() {
                         <TrendingUp size={20} color="white" />
                     </div>
                     <div>
-                        <h1 className="font-bold text-lg gradient-text">PaperTrade</h1>
+                        <h1 className="font-bold text-lg gradient-text">Paper Bull</h1>
                         <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Virtual Stock Market</p>
                     </div>
                 </div>

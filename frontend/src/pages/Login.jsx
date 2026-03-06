@@ -40,7 +40,7 @@ export default function Login() {
                         <TrendingUp size={20} color="white" />
                     </div>
                     <div>
-                        <h1 className="font-bold text-lg gradient-text">PaperTrade</h1>
+                        <h1 className="font-bold text-lg gradient-text">Paper Bull</h1>
                         <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Virtual Stock Market</p>
                     </div>
                 </div>
@@ -71,7 +71,7 @@ export default function Login() {
                 </form>
 
                 <p className="text-center text-sm mt-6" style={{ color: 'var(--text-secondary)' }}>
-                    New to PaperTrade?{' '}
+                    New to Paper Bull?{' '}
                     <Link to="/register" style={{ color: 'var(--accent)' }} className="font-medium hover:underline">Create Account</Link>
                 </p>
             </motion.div>

@@ -1,4 +1,4 @@
-# PaperTrade 📈
+# Paper Bull 📈
 
 A full-stack **paper trading** web application built with React, Node.js, Express, and MongoDB.
 
@@ -80,4 +80,4 @@ Paper_Trading/
 ```
 
 ## License
-MIT
+prabhakarmaddi26

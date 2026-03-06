@@ -27,7 +27,7 @@ export default function Navbar() {
                     <TrendingUp size={18} color="white" />
                 </div>
                 <div>
-                    <p className="font-bold text-base gradient-text">PaperTrade</p>
+                    <p className="font-bold text-base gradient-text">Paper Bull</p>
                     <p className="text-xs" style={{ color: 'var(--text-secondary)' }}>Paper Trading</p>
                 </div>
             </div>
