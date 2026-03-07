@@ -12,6 +12,49 @@ const Trade = () => {
     const [quantity, setQuantity] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
 
+    // New state for portfolio and watchlist
+    const [portfolioData, setPortfolioData] = useState({ holdings: [] });
+    const [watchlistData, setWatchlistData] = useState([]);
+    const [isInWatchlist, setIsInWatchlist] = useState(false);
+
+    useEffect(() => {
+        fetchUserData();
+    }, []);
+
+    const fetchUserData = async () => {
+        try {
+            const [portfolioRes, watchlistRes] = await Promise.all([
+                axios.get('/portfolio'),
+                axios.get('/user/watchlist')
+            ]);
+            setPortfolioData(portfolioRes.data);
+            setWatchlistData(watchlistRes.data);
+        } catch (error) {
+            console.error('Error fetching user data', error);
+        }
+    };
+
+    useEffect(() => {
+        if (selectedStock) {
+            setIsInWatchlist(watchlistData.some(w => w.symbol === selectedStock));
+        }
+    }, [selectedStock, watchlistData]);
+
+    const toggleWatchlist = async () => {
+        if (!selectedStock) return;
+        try {
+            if (isInWatchlist) {
+                await axios.delete(`/user/watchlist/${selectedStock}`);
+            } else {
+                await axios.post('/user/watchlist', { symbol: selectedStock });
+            }
+            await fetchUserData(); // Refresh to update button state
+            toast.success(isInWatchlist ? 'Removed from watchlist' : 'Added to watchlist');
+        } catch (error) {
+            toast.error('Could not update watchlist');
+        }
+    };
+
     useEffect(() => {
         if (query.length > 1) {
             const timer = setTimeout(searchStocks, 300);
@@ -136,6 +179,15 @@ const Trade = () => {
                                     <div className="flex items-center gap-4">
                                         <h2 className="text-3xl font-bold tracking-tight text-text-main uppercase">{quote.name}</h2>
                                         <span className="symbol-badge bg-primary-light text-primary border-primary/20 uppercase">{quote.symbol}</span>
+                                        <button
+                                            onClick={toggleWatchlist}
+                                            className={`ml-2 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors border ${isInWatchlist
+                                                    ? 'bg-primary text-white border-primary'
+                                                    : 'bg-transparent text-primary border-primary/30 hover:bg-primary/10'
+                                                }`}
+                                        >
+                                            {isInWatchlist ? 'In Watchlist' : '+ Watchlist'}
+                                        </button>
                                     </div>
                                     <div className="flex items-center gap-6 mt-6">
                                         <span className="text-5xl font-bold tracking-tighter text-text-main">₹{quote.price.toLocaleString('en-IN')}</span>
@@ -167,12 +219,53 @@ const Trade = () => {
                             <StockChart symbol={selectedStock} />
                         </div>
                     ) : (
-                        <div className="glass-card h-[450px] flex flex-col items-center justify-center text-center bg-bg-main/50 border-dashed border-2 border-border-main shadow-none">
-                            <div className="w-24 h-24 bg-bg-card rounded-2xl shadow-sm border border-border-light flex items-center justify-center mb-6">
-                                <Activity size={48} className="text-primary/30" />
+                        <div className="glass-card flex flex-col items-center justify-center bg-bg-main/50 border-primary/10 shadow-none p-10 min-h-[450px]">
+                            <div className="w-full">
+                                <h3 className="text-2xl font-bold tracking-tight mb-8 text-text-main uppercase">Your Active Positions</h3>
+
+                                {portfolioData.holdings.length === 0 ? (
+                                    <div className="flex flex-col items-center text-center gap-6 py-10">
+                                        <div className="p-4 bg-primary/10 rounded-2xl">
+                                            <IndianRupee className="text-primary" size={32} />
+                                        </div>
+                                        <div>
+                                            <h3 className="text-xl font-bold text-text-main mb-3">No Active Trades</h3>
+                                            <p className="text-sm text-text-muted font-medium leading-relaxed max-w-md mx-auto">
+                                                Search for an asset above to execute a trade. Your portfolio positions will appear here.
+                                            </p>
+                                        </div>
+                                    </div>
+                                ) : (
+                                    <div className="overflow-x-auto">
+                                        <table className="w-full">
+                                            <thead>
+                                                <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main">
+                                                    <th className="pb-4">Asset</th>
+                                                    <th className="pb-4">Qty</th>
+                                                    <th className="pb-4 text-right">Avg Price</th>
+                                                    <th className="pb-4 text-right">Returns</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody className="divide-y divide-border-light">
+                                                {portfolioData.holdings.map((h) => (
+                                                    <tr key={h.stockSymbol} className="group hover:bg-bg-card transition-colors cursor-pointer" onClick={() => handleSelect(h.stockSymbol)}>
+                                                        <td className="py-4">
+                                                            <div className="flex flex-col">
+                                                                <span className="font-bold text-primary group-hover:underline">{h.stockSymbol}</span>
+                                                            </div>
+                                                        </td>
+                                                        <td className="py-4 font-bold text-text-main">{h.quantity}</td>
+                                                        <td className="py-4 text-right font-medium text-text-light">₹{h.avgPrice.toLocaleString('en-IN')}</td>
+                                                        <td className={`py-4 text-right font-bold ${h.pnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
+                                                            {h.pnl >= 0 ? '+' : ''}₹{h.pnl.toLocaleString('en-IN')}
+                                                        </td>
+                                                    </tr>
+                                                ))}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                )}
                             </div>
-                            <p className="text-2xl font-bold tracking-tight text-text-muted">Select an asset to analyze</p>
-                            <p className="text-sm font-bold text-text-light uppercase mt-3 tracking-widest">Awaiting Command from Terminal...</p>
                         </div>
                     )}
                 </div>
@@ -222,7 +315,7 @@ const Trade = () => {
                                 <div className="grid grid-cols-1 gap-4 pt-2">
                                     <button
                                         onClick={() => executeTrade('BUY')}
-                                        className="btn-primary py-5 text-xl font-bold uppercase tracking-tight flex items-center justify-center gap-3 shadow-indigo-200"
+                                        className="btn-primary py-5 text-xl font-bold uppercase tracking-tight flex items-center justify-center gap-3 shadow-emerald-200/20 bg-emerald-500 hover:bg-emerald-600 border-emerald-400 text-white"
                                         disabled={isLoading}
                                     >
                                         <TrendingUp size={24} />

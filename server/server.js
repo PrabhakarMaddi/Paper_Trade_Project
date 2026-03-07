@@ -10,6 +10,7 @@ const tradeRoutes = require('./routes/trade');
 const portfolioRoutes = require('./routes/portfolio');
 const stockRoutes = require('./routes/stock');
 const leaderboardRoutes = require('./routes/leaderboard');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -24,6 +25,7 @@ app.use('/api/trade', tradeRoutes);
 app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/stock', stockRoutes);
 app.use('/api/leaderboard', leaderboardRoutes);
+app.use('/api/user', userRoutes);
 
 // Health check
 app.get('/api/health', (req, res) => {

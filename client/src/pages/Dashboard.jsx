@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react';
 import axios from '../api/axios';
-import { TrendingUp, TrendingDown, IndianRupee, Briefcase, Activity, ArrowUpRight, ArrowDownRight } from 'lucide-react';
+import { TrendingUp, TrendingDown, IndianRupee, Briefcase, Activity, ArrowUpRight, ArrowDownRight, Trash2 } from 'lucide-react';
 
 const Dashboard = () => {
     const [data, setData] = useState(null);
+    const [watchlistData, setWatchlistData] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -14,8 +15,12 @@ const Dashboard = () => {
 
     const fetchDashboard = async () => {
         try {
-            const { data } = await axios.get('/portfolio');
-            setData(data);
+            const [portfolioRes, watchlistRes] = await Promise.all([
+                axios.get('/portfolio'),
+                axios.get('/user/watchlist')
+            ]);
+            setData(portfolioRes.data);
+            setWatchlistData(watchlistRes.data);
         } catch (error) {
             console.error('Error fetching dashboard');
         } finally {
@@ -30,7 +35,16 @@ const Dashboard = () => {
         </div>
     );
 
-    const { summary, holdings } = data;
+    const removeFromWatchlist = async (symbol) => {
+        try {
+            const { data } = await axios.delete(`/user/watchlist/${symbol}`);
+            fetchDashboard(); // Refresh to get the latest quotes
+        } catch (error) {
+            console.error('Error removing from watchlist');
+        }
+    };
+
+    const { summary } = data;
 
     return (
         <div className="space-y-10">
@@ -86,42 +100,52 @@ const Dashboard = () => {
                 <div className="lg:col-span-2">
                     <div className="glass-card h-full p-10">
                         <div className="flex items-center justify-between mb-10">
-                            <h2 className="text-2xl font-bold tracking-tight text-text-main">ACTIVE HOLDINGS</h2>
-                            <button className="text-xs font-bold uppercase tracking-widest text-primary hover:underline transition-all">View Full Portfolio</button>
+                            <h2 className="text-2xl font-bold tracking-tight text-text-main">YOUR WATCHLIST</h2>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
                                     <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main">
                                         <th className="pb-5">Stock Asset</th>
-                                        <th className="pb-5">Quantity</th>
                                         <th className="pb-5 text-right">Market Price</th>
-                                        <th className="pb-5 text-right">Total Returns</th>
+                                        <th className="pb-5 text-right">Day Change</th>
+                                        <th className="pb-5 text-right w-16">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-border-light">
-                                    {holdings.length === 0 ? (
+                                    {watchlistData.length === 0 ? (
                                         <tr>
                                             <td colSpan="4" className="py-20 text-center text-text-muted font-medium">
-                                                No active positions found. Explore the markets to start trading!
+                                                Your watchlist is empty. Add stocks from the Trade page.
                                             </td>
                                         </tr>
                                     ) : (
-                                        holdings.slice(0, 5).map((h) => (
-                                            <tr key={h.stockSymbol} className="group hover:bg-bg-main transition-colors">
+                                        watchlistData.map((w) => (
+                                            <tr key={w.symbol} className="group hover:bg-bg-main transition-colors">
                                                 <td className="py-6">
                                                     <div className="flex flex-col">
-                                                        <span className="symbol-badge w-fit mb-1.5 bg-primary-light text-primary border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">{h.stockSymbol}</span>
-                                                        <span className="text-xs font-bold text-text-muted transition-colors">{h.stockName}</span>
+                                                        <span className="symbol-badge w-fit mb-1.5 bg-primary-light text-primary border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">{w.symbol}</span>
+                                                        <span className="text-xs font-bold text-text-muted transition-colors line-clamp-1">{w.name}</span>
                                                     </div>
                                                 </td>
-                                                <td className="py-6 font-bold text-text-main">{h.quantity}</td>
-                                                <td className="py-6 text-right font-bold text-text-main text-lg">₹{h.currentPrice.toLocaleString('en-IN')}</td>
-                                                <td className={`py-6 text-right font-bold text-lg ${h.pnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
+                                                <td className="py-6 text-right font-bold text-text-main text-lg">
+                                                    ₹{w.price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                </td>
+                                                <td className={`py-6 text-right font-bold text-lg ${w.change >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
                                                     <div className="flex items-center justify-end gap-1">
-                                                        {h.pnl >= 0 ? '+' : ''}₹{h.pnl.toLocaleString('en-IN')}
+                                                        {w.change >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+                                                        {w.change >= 0 ? '+' : ''}{w.change.toFixed(2)}
                                                     </div>
-                                                    <div className="text-[11px] font-bold opacity-70">({h.pnlPercent}%)</div>
+                                                    <div className="text-[11px] font-bold opacity-70">({w.changePercent})</div>
+                                                </td>
+                                                <td className="py-6 text-right">
+                                                    <button
+                                                        onClick={() => removeFromWatchlist(w.symbol)}
+                                                        className="p-2 text-text-light hover:text-accent-down hover:bg-accent-down/10 rounded-xl transition-all"
+                                                        title="Remove from watchlist"
+                                                    >
+                                                        <Trash2 size={18} />
+                                                    </button>
                                                 </td>
                                             </tr>
                                         ))
