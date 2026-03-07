@@ -31,6 +31,8 @@ const StockChart = ({ symbol }) => {
         };
 
         fetchData();
+        const interval = setInterval(fetchData, 60000); // 1 minute
+        return () => clearInterval(interval);
     }, [symbol]);
 
     if (loading) return (

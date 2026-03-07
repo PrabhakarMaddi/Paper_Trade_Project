@@ -8,6 +8,8 @@ const Dashboard = () => {
 
     useEffect(() => {
         fetchDashboard();
+        const interval = setInterval(fetchDashboard, 10000); // 10 seconds
+        return () => clearInterval(interval);
     }, []);
 
     const fetchDashboard = async () => {

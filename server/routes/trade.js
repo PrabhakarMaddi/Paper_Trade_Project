@@ -4,7 +4,7 @@ const auth = require('../middleware/auth');
 const Trade = require('../models/Trade');
 const Portfolio = require('../models/Portfolio');
 const User = require('../models/User');
-const { getQuote, SIMULATED_STOCKS } = require('../utils/stockService');
+const { getQuote } = require('../utils/stockService');
 
 const router = express.Router();
 

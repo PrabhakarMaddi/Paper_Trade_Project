@@ -20,7 +20,7 @@ router.get('/quote/:symbol', auth, async (req, res) => {
 // GET /api/stock/search/:query
 router.get('/search/:query', auth, async (req, res) => {
     try {
-        const results = searchStocks(req.params.query);
+        const results = await searchStocks(req.params.query);
         res.json(results);
     } catch (error) {
         res.status(500).json({ message: 'Error searching stocks' });

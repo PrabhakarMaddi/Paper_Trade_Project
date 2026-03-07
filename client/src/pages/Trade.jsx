@@ -28,13 +28,21 @@ const Trade = () => {
         } catch (error) { }
     };
 
+    const fetchQuote = async (symbol) => {
+        try {
+            const { data } = await axios.get(`/stock/quote/${symbol}`);
+            setQuote(data);
+        } catch (error) {
+            console.error('Error fetching quote');
+        }
+    };
+
     const handleSelect = async (symbol) => {
         setQuery('');
         setResults([]);
         setIsLoading(true);
         try {
-            const { data } = await axios.get(`/stock/quote/${symbol}`);
-            setQuote(data);
+            await fetchQuote(symbol);
             setSelectedStock(symbol);
         } catch (error) {
             toast.error('Could not fetch stock data');
@@ -42,6 +50,16 @@ const Trade = () => {
             setIsLoading(false);
         }
     };
+
+    useEffect(() => {
+        let interval;
+        if (selectedStock && !isLoading) {
+            interval = setInterval(() => {
+                fetchQuote(selectedStock);
+            }, 10000); // 10 seconds
+        }
+        return () => clearInterval(interval);
+    }, [selectedStock, isLoading]);
 
     const executeTrade = async (type) => {
         if (quantity < 1) return toast.error('Quantity must be at least 1');
@@ -88,11 +106,20 @@ const Trade = () => {
                                         onClick={() => handleSelect(r.symbol)}
                                     >
                                         <div>
-                                            <span className="font-bold text-xl text-primary group-hover:underline tracking-tight">{r.symbol}</span>
-                                            <p className="text-xs font-bold text-text-muted uppercase tracking-widest mt-0.5">{r.name}</p>
+                                            <div className="flex items-center gap-3">
+                                                <span className="font-bold text-xl text-primary group-hover:underline tracking-tight">{r.symbol}</span>
+                                                {r.exchange && r.exchange !== 'Unknown' && (
+                                                    <span className="text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-md bg-border-light text-text-muted border border-border-main group-hover:bg-primary/10 group-hover:text-primary group-hover:border-primary/30 transition-colors">
+                                                        {r.exchange}
+                                                    </span>
+                                                )}
+                                            </div>
+                                            <p className="text-xs font-bold text-text-muted uppercase tracking-widest mt-1 opacity-80">{r.name}</p>
                                         </div>
                                         <div className="text-right flex items-center gap-3">
-                                            <span className="font-bold text-lg text-text-main">₹{r.price.toLocaleString('en-IN')}</span>
+                                            <span className="font-bold text-lg text-text-main">
+                                                {r.price > 0 ? `₹${r.price.toLocaleString('en-IN')}` : 'N/A'}
+                                            </span>
                                             <ArrowUpRight className="text-primary opacity-0 group-hover:opacity-100 transition-all" size={20} />
                                         </div>
                                     </div>

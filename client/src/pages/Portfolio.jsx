@@ -8,6 +8,8 @@ const Portfolio = () => {
 
     useEffect(() => {
         fetchPortfolio();
+        const interval = setInterval(fetchPortfolio, 10000); // 10 seconds
+        return () => clearInterval(interval);
     }, []);
 
     const fetchPortfolio = async () => {
