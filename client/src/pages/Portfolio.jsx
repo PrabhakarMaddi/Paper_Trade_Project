@@ -39,7 +39,7 @@ const Portfolio = () => {
                 </div>
                 <div className="text-right">
                     <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-text-light mb-1">Portfolio Valuation</p>
-                    <p className="text-5xl font-bold text-primary tracking-tighter italic">₹{summary.netWorth.toLocaleString('en-IN')}</p>
+                    <p className="text-5xl font-bold text-primary tracking-tighter">₹{summary.netWorth.toLocaleString('en-IN')}</p>
                 </div>
             </div>
 
@@ -106,17 +106,17 @@ const Portfolio = () => {
                                             </div>
                                         </td>
                                         <td className="px-8 py-7">
-                                            <span className="font-bold text-xl text-text-main italic">{h.quantity}</span>
+                                            <span className="font-bold text-xl text-text-main ">{h.quantity}</span>
                                             <p className="text-[9px] font-bold uppercase tracking-widest text-text-light mt-0.5">Quantity Held</p>
                                         </td>
                                         <td className="px-8 py-7 text-right">
-                                            <span className="font-bold text-text-muted italic">₹{h.avgPrice.toLocaleString('en-IN')}</span>
+                                            <span className="font-bold text-text-muted ">₹{h.avgPrice.toLocaleString('en-IN')}</span>
                                         </td>
                                         <td className="px-8 py-7 text-right">
-                                            <span className="font-bold text-text-main text-xl italic">₹{h.currentPrice.toLocaleString('en-IN')}</span>
+                                            <span className="font-bold text-text-main text-xl ">₹{h.currentPrice.toLocaleString('en-IN')}</span>
                                         </td>
                                         <td className="px-8 py-7 text-right">
-                                            <div className={`font-bold italic text-2xl ${h.pnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
+                                            <div className={`font-bold  text-2xl ${h.pnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
                                                 {h.pnl >= 0 ? '+' : ''}₹{h.pnl.toLocaleString('en-IN')}
                                             </div>
                                             <div className={`text-[11px] font-bold mt-0.5 ${h.pnl >= 0 ? 'text-accent-up' : 'text-accent-down'} opacity-70`}>

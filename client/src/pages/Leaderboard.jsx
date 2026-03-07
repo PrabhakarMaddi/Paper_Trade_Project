@@ -31,7 +31,7 @@ const Leaderboard = () => {
     return (
         <div className="space-y-12">
             <div className="text-center space-y-4">
-                <h1 className="text-5xl font-bold tracking-tighter text-text-main uppercase italic">Elite Traders</h1>
+                <h1 className="text-5xl font-bold tracking-tighter text-text-main uppercase">Elite Traders</h1>
                 <p className="text-text-muted font-bold uppercase text-xs tracking-[0.4em]">Ranking the top 1% of the Indian Market</p>
             </div>
 

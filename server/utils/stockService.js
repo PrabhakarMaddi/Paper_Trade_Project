@@ -1,4 +1,5 @@
-const axios = require('axios');
+const YahooFinanceClass = require('yahoo-finance2').default;
+const yahooFinance = new YahooFinanceClass();
 
 // Simulated stock data for fallback
 const SIMULATED_STOCKS = {
@@ -34,22 +35,20 @@ const SIMULATED_STOCKS = {
     ULTRACEMCO: { name: 'UltraTech Cement Ltd.', basePrice: 9850.30 }
 };
 
-// Generate a realistic random price fluctuation
+// Generate a realistic random price fluctuation for fallback
 function fluctuate(basePrice) {
-    const change = (Math.random() - 0.49) * basePrice * 0.02; // Slightly less volatile for Indian markets
+    const change = (Math.random() - 0.49) * basePrice * 0.02;
     return Math.round((basePrice + change) * 100) / 100;
 }
 
-// Generate simulated intraday data (candlestick)
+// Generate simulated intraday data (candlestick) for fallback
 function generateIntradayData(symbol) {
-    const stock = SIMULATED_STOCKS[symbol.toUpperCase()];
-    if (!stock) return null;
+    const stock = SIMULATED_STOCKS[symbol.toUpperCase()] || { name: symbol, basePrice: 1000 };
 
     const data = [];
     let price = stock.basePrice;
     const now = new Date();
 
-    // Generate 75 five-minute candles (6.25 hours trading day - Indian Market 9:15 to 3:30)
     for (let i = 74; i >= 0; i--) {
         const time = new Date(now.getTime() - i * 5 * 60 * 1000);
         const open = price;
@@ -71,43 +70,39 @@ function generateIntradayData(symbol) {
     return data;
 }
 
-// Simulated fallback for Indian stocks (Alpha Vantage has limited support for NSE/BSE)
+/**
+ * Get real-time quote for a symbol.
+ */
 async function getQuote(symbol) {
-    const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
-    let upperSymbol = symbol.toUpperCase();
+    const upperSymbol = symbol.toUpperCase();
+    const searchSymbol = upperSymbol.includes('.') ? upperSymbol : `${upperSymbol}.NS`;
 
-    // Handle common NSE symbols if passed without suffix
-    const nseSymbol = upperSymbol.endsWith('.BSE') || upperSymbol.endsWith('.NSE') ? upperSymbol : `${upperSymbol}.NSE`;
-
-    // Try Alpha Vantage if key is present
-    if (apiKey && apiKey !== 'your_alpha_vantage_api_key_here') {
-        try {
-            const url = `https://www.alphavantage.co/query?function=GLOBAL_QUOTE&symbol=${nseSymbol}&apikey=${apiKey}`;
-            const { data } = await axios.get(url, { timeout: 5000 });
-            const quote = data['Global Quote'];
-            if (quote && quote['05. price']) {
-                return {
-                    symbol: upperSymbol,
-                    name: SIMULATED_STOCKS[upperSymbol]?.name || upperSymbol,
-                    price: parseFloat(quote['05. price']),
-                    change: parseFloat(quote['09. change']),
-                    changePercent: quote['10. change percent'],
-                    high: parseFloat(quote['03. high']),
-                    low: parseFloat(quote['04. low']),
-                    volume: parseInt(quote['06. volume']),
-                    previousClose: parseFloat(quote['08. previous close']),
-                    simulated: false
-                };
-            }
-        } catch (err) { }
+    try {
+        const quote = await yahooFinance.quote(searchSymbol);
+        if (quote) {
+            return {
+                symbol: upperSymbol,
+                name: quote.longName || quote.shortName || upperSymbol,
+                price: quote.regularMarketPrice,
+                change: quote.regularMarketChange,
+                changePercent: (quote.regularMarketChangePercent?.toFixed(2) || '0.00') + '%',
+                high: quote.regularMarketDayHigh,
+                low: quote.regularMarketDayLow,
+                volume: quote.regularMarketVolume,
+                previousClose: quote.regularMarketPreviousClose,
+                simulated: false
+            };
+        }
+    } catch (err) {
+        console.error(`Yahoo Finance Quote Error [${upperSymbol}]:`, err.message);
     }
 
-    // Simulated fallback
-    const stock = SIMULATED_STOCKS[upperSymbol] || SIMULATED_STOCKS[upperSymbol.replace('.NSE', '')];
+    // Fallback to simulated data
+    const stock = SIMULATED_STOCKS[upperSymbol] || SIMULATED_STOCKS[upperSymbol.split('.')[0]];
     if (!stock) return null;
 
     const price = fluctuate(stock.basePrice);
-    const prevClose = fluctuate(stock.basePrice);
+    const prevClose = stock.basePrice;
     const change = Math.round((price - prevClose) * 100) / 100;
     const changePercent = ((change / prevClose) * 100).toFixed(2) + '%';
 
@@ -125,8 +120,35 @@ async function getQuote(symbol) {
     };
 }
 
-// Search stocks by query
-function searchStocks(query) {
+/**
+ * Search for stocks by query.
+ */
+async function searchStocks(query) {
+    if (!query) return [];
+
+    try {
+        const results = await yahooFinance.search(query, {
+            quotesCount: 10,
+            newsCount: 0
+        });
+
+        // Map and clean search results
+        const rawQuotes = results.quotes || [];
+        const filteredResults = rawQuotes
+            .filter(q => q.symbol && (q.isYahooFinance || q.quoteType || q.typeDisp))
+            .map(q => ({
+                symbol: q.symbol,
+                name: q.longname || q.longName || q.shortname || q.shortName || q.symbol,
+                price: q.prevClose || q.regularMarketPreviousClose || 0,
+                exchange: q.exchDisp || q.exchange || 'Unknown'
+            }));
+
+        if (filteredResults.length > 0) return filteredResults;
+    } catch (err) {
+        console.error(`Yahoo Finance Search Error [${query}]:`, err.message);
+    }
+
+    // Fallback search
     const q = query.toUpperCase();
     return Object.entries(SIMULATED_STOCKS)
         .filter(([sym, data]) =>
@@ -135,37 +157,38 @@ function searchStocks(query) {
         .map(([sym, data]) => ({
             symbol: sym,
             name: data.name,
-            price: fluctuate(data.basePrice)
+            price: fluctuate(data.basePrice),
+            exchange: 'NSE'
         }))
         .slice(0, 10);
 }
 
-// Get intraday data – try Alpha Vantage first
+/**
+ * Get intraday chart data.
+ */
 async function getIntraday(symbol) {
-    const apiKey = process.env.ALPHA_VANTAGE_API_KEY;
     const upperSymbol = symbol.toUpperCase();
+    const searchSymbol = upperSymbol.includes('.') ? upperSymbol : `${upperSymbol}.NS`;
 
-    if (apiKey && apiKey !== 'your_alpha_vantage_api_key_here') {
-        try {
-            const url = `https://www.alphavantage.co/query?function=TIME_SERIES_INTRADAY&symbol=${upperSymbol}&interval=5min&apikey=${apiKey}`;
-            const { data } = await axios.get(url, { timeout: 8000 });
-            const timeSeries = data['Time Series (5min)'];
-            if (timeSeries) {
-                return Object.entries(timeSeries)
-                    .slice(0, 78)
-                    .reverse()
-                    .map(([ts, vals]) => ({
-                        timestamp: ts,
-                        open: parseFloat(vals['1. open']),
-                        high: parseFloat(vals['2. high']),
-                        low: parseFloat(vals['3. low']),
-                        close: parseFloat(vals['4. close']),
-                        volume: parseInt(vals['5. volume'])
-                    }));
-            }
-        } catch (err) {
-            // Fall through
+    try {
+        // Fetch 1 day of 5-minute intervals
+        const period1 = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        const result = await yahooFinance.chart(searchSymbol, { period1, interval: '5m' });
+
+        if (result && result.quotes && result.quotes.length > 0) {
+            return result.quotes
+                .filter(q => q.close !== null)
+                .map(q => ({
+                    timestamp: q.date.toISOString(),
+                    open: q.open,
+                    high: q.high,
+                    low: q.low,
+                    close: q.close,
+                    volume: q.volume
+                }));
         }
+    } catch (err) {
+        console.error(`Yahoo Finance Chart Error [${upperSymbol}]:`, err.message);
     }
 
     return generateIntradayData(upperSymbol);

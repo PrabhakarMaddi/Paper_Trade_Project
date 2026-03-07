@@ -78,14 +78,14 @@ const History = () => {
                         </thead>
                         <tbody className="divide-y divide-border-light">
                             {loading ? (
-                                <tr><td colSpan="6" className="px-8 py-24 text-center animate-pulse font-bold italic text-text-muted uppercase tracking-widest">Retrieving archival data...</td></tr>
+                                <tr><td colSpan="6" className="px-8 py-24 text-center animate-pulse font-bold  text-text-muted uppercase tracking-widest">Retrieving archival data...</td></tr>
                             ) : trades.length === 0 ? (
                                 <tr><td colSpan="6" className="px-8 py-32 text-center text-text-muted font-bold tracking-tight">No records found for this sector.</td></tr>
                             ) : (
                                 trades.map((t) => (
                                     <tr key={t._id} className="group hover:bg-bg-main transition-all">
                                         <td className="px-8 py-7 font-medium">
-                                            <div className="text-text-main font-bold italic">{new Date(t.timestamp).toLocaleDateString()}</div>
+                                            <div className="text-text-main font-bold ">{new Date(t.timestamp).toLocaleDateString()}</div>
                                             <div className="text-[10px] font-bold uppercase text-text-light mt-1.5">{new Date(t.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</div>
                                         </td>
                                         <td className="px-8 py-7">
@@ -95,13 +95,13 @@ const History = () => {
                                             </span>
                                         </td>
                                         <td className="px-8 py-7">
-                                            <span className="font-bold text-xl italic text-text-main group-hover:text-primary transition-colors">{t.stockSymbol}</span>
-                                            <p className="text-[10px] font-bold uppercase text-text-light truncate max-w-[150px] italic mt-1">{t.stockName}</p>
+                                            <span className="font-bold text-xl  text-text-main group-hover:text-primary transition-colors">{t.stockSymbol}</span>
+                                            <p className="text-[10px] font-bold uppercase text-text-light truncate max-w-[150px]  mt-1">{t.stockName}</p>
                                         </td>
-                                        <td className="px-8 py-7 font-bold italic text-text-muted">{t.quantity}</td>
-                                        <td className="px-8 py-7 text-right font-bold italic text-text-main">₹{t.price.toLocaleString('en-IN')}</td>
+                                        <td className="px-8 py-7 font-bold  text-text-muted">{t.quantity}</td>
+                                        <td className="px-8 py-7 text-right font-bold  text-text-main">₹{t.price.toLocaleString('en-IN')}</td>
                                         <td className="px-8 py-7 text-right">
-                                            <span className="font-bold italic text-lg text-text-main">₹{t.total.toLocaleString('en-IN')}</span>
+                                            <span className="font-bold  text-lg text-text-main">₹{t.total.toLocaleString('en-IN')}</span>
                                         </td>
                                     </tr>
                                 ))
