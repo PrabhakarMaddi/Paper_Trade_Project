@@ -1,8 +1,11 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 import { TrendingUp, TrendingDown, IndianRupee, Briefcase, Activity, ArrowUpRight, ArrowDownRight, Trash2 } from 'lucide-react';
+import { toast } from 'react-hot-toast';
 
 const Dashboard = () => {
+    const navigate = useNavigate();
     const [data, setData] = useState(null);
     const [watchlistData, setWatchlistData] = useState([]);
     const [loading, setLoading] = useState(true);
@@ -38,9 +41,11 @@ const Dashboard = () => {
     const removeFromWatchlist = async (symbol) => {
         try {
             const { data } = await axios.delete(`/user/watchlist/${symbol}`);
+            toast.success(`${symbol} removed from watchlist`);
             fetchDashboard(); // Refresh to get the latest quotes
         } catch (error) {
             console.error('Error removing from watchlist');
+            toast.error('Could not remove from watchlist');
         }
     };
 
@@ -121,7 +126,11 @@ const Dashboard = () => {
                                         </tr>
                                     ) : (
                                         watchlistData.map((w) => (
-                                            <tr key={w.symbol} className="group hover:bg-bg-main transition-colors">
+                                            <tr
+                                                key={w.symbol}
+                                                onClick={() => navigate(`/trade?symbol=${w.symbol}`)}
+                                                className="group hover:bg-bg-card transition-colors cursor-pointer"
+                                            >
                                                 <td className="py-6">
                                                     <div className="flex flex-col">
                                                         <span className="symbol-badge w-fit mb-1.5 bg-primary-light text-primary border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">{w.symbol}</span>
@@ -140,7 +149,10 @@ const Dashboard = () => {
                                                 </td>
                                                 <td className="py-6 text-right">
                                                     <button
-                                                        onClick={() => removeFromWatchlist(w.symbol)}
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            removeFromWatchlist(w.symbol);
+                                                        }}
                                                         className="p-2 text-text-light hover:text-accent-down hover:bg-accent-down/10 rounded-xl transition-all"
                                                         title="Remove from watchlist"
                                                     >
