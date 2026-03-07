@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
-import { TrendingUp, TrendingDown, IndianRupee, Briefcase, Activity, ArrowUpRight, ArrowDownRight, Trash2 } from 'lucide-react';
+import { TrendingUp, TrendingDown, IndianRupee, Briefcase, Activity, ArrowUpRight, ArrowDownRight, Trash2, Search, Plus } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 
 const Dashboard = () => {
@@ -10,11 +10,47 @@ const Dashboard = () => {
     const [watchlistData, setWatchlistData] = useState([]);
     const [loading, setLoading] = useState(true);
 
+    // Search state
+    const [query, setQuery] = useState('');
+    const [results, setResults] = useState([]);
+    const [isSearching, setIsSearching] = useState(false);
+
     useEffect(() => {
         fetchDashboard();
         const interval = setInterval(fetchDashboard, 10000); // 10 seconds
         return () => clearInterval(interval);
     }, []);
+
+    useEffect(() => {
+        if (query.length > 1) {
+            const timer = setTimeout(searchStocks, 300);
+            return () => clearTimeout(timer);
+        } else {
+            setResults([]);
+        }
+    }, [query]);
+
+    const searchStocks = async () => {
+        try {
+            const { data } = await axios.get(`/stock/search/${query}`);
+            setResults(data);
+        } catch (error) { }
+    };
+
+    const addToWatchlist = async (symbol) => {
+        try {
+            setIsSearching(true);
+            await axios.post('/user/watchlist', { symbol });
+            toast.success(`${symbol} added to watchlist`);
+            setQuery('');
+            setResults([]);
+            fetchDashboard(); // Refresh
+        } catch (error) {
+            toast.error('Could not add to watchlist');
+        } finally {
+            setIsSearching(false);
+        }
+    };
 
     const fetchDashboard = async () => {
         try {
@@ -112,8 +148,63 @@ const Dashboard = () => {
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div className="lg:col-span-2">
                     <div className="glass-card h-full p-10">
-                        <div className="flex items-center justify-between mb-10">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
                             <h2 className="text-2xl font-bold tracking-tight text-text-main">YOUR WATCHLIST</h2>
+
+                            {/* Advanced Search Bar */}
+                            <div className="relative w-full sm:w-80 z-20">
+                                <div className="flex items-center bg-bg-main border-2 border-primary/20 rounded-xl px-4 py-3 focus-within:border-primary transition-all shadow-sm">
+                                    <Search className="text-primary mr-3" size={20} />
+                                    <input
+                                        type="text"
+                                        placeholder="Search NIFTY 50 Stocks..."
+                                        className="bg-transparent border-none outline-none text-sm w-full font-bold text-text-main placeholder:text-text-light"
+                                        value={query}
+                                        onChange={(e) => setQuery(e.target.value)}
+                                    />
+                                </div>
+
+                                {/* Search Results Dropdown */}
+                                {(results?.length || 0) > 0 && (
+                                    <div className="absolute top-full left-0 right-0 mt-3 bg-bg-card border border-border-main rounded-xl shadow-2xl overflow-hidden max-h-80 overflow-y-auto">
+                                        <div className="divide-y divide-border-light">
+                                            {results.map((r) => {
+                                                const inWatchlist = watchlistData?.some(w => w.symbol === r.symbol);
+                                                return (
+                                                    <div
+                                                        key={r.symbol}
+                                                        className="p-4 hover:bg-bg-main flex justify-between items-center transition-colors group cursor-pointer"
+                                                        onClick={() => !inWatchlist && addToWatchlist(r.symbol)}
+                                                    >
+                                                        <div className="flex flex-col">
+                                                            <div className="flex items-center gap-2 mb-1">
+                                                                <span className="text-sm font-bold text-primary group-hover:underline tracking-tight">{r.symbol}</span>
+                                                                {r.exchange && r.exchange !== 'Unknown' && (
+                                                                    <span className="text-[9px] font-bold uppercase tracking-widest px-1.5 py-0.5 rounded bg-border-light text-text-muted border border-border-main">
+                                                                        {r.exchange}
+                                                                    </span>
+                                                                )}
+                                                            </div>
+                                                            <span className="text-[10px] font-bold text-text-muted uppercase tracking-wider opacity-80 truncate max-w-[140px]">{r.name}</span>
+                                                        </div>
+                                                        <div className="flex items-center gap-3">
+                                                            <span className="font-bold text-sm text-text-main">
+                                                                {r.price > 0 ? `₹${r.price.toLocaleString('en-IN')}` : ''}
+                                                            </span>
+                                                            <button
+                                                                disabled={inWatchlist || isSearching}
+                                                                className={`p-2 rounded-lg transition-all ${inWatchlist ? 'bg-primary/10 text-primary cursor-default' : 'bg-primary text-white hover:bg-primary/90 opacity-0 md:group-hover:opacity-100 shadow-md'}`}
+                                                            >
+                                                                {inWatchlist ? <TrendingUp size={14} /> : <Plus size={14} />}
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                );
+                                            })}
+                                        </div>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                         <div className="overflow-x-auto">
                             <table className="w-full">
