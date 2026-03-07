@@ -22,10 +22,18 @@ const Dashboard = () => {
                 axios.get('/portfolio'),
                 axios.get('/user/watchlist')
             ]);
-            setData(portfolioRes.data);
-            setWatchlistData(watchlistRes.data);
+            setData(portfolioRes.data || {});
+
+            // Ensure watchlist is always an array to prevent .map crashes
+            setWatchlistData(
+                watchlistRes.data?.watchlist ||
+                watchlistRes.data ||
+                []
+            );
         } catch (error) {
-            console.error('Error fetching dashboard');
+            console.error('Error fetching dashboard', error);
+            setData(null);
+            setWatchlistData([]);
         } finally {
             setLoading(false);
         }

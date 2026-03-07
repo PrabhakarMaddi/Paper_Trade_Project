@@ -1,6 +1,18 @@
 const YahooFinanceClass = require('yahoo-finance2').default;
 const yahooFinance = new YahooFinanceClass();
 
+const NIFTY_BASKET = [
+    'RELIANCE.NS', 'TCS.NS', 'HDFCBANK.NS', 'ICICIBANK.NS', 'INFY.NS',
+    'ITC.NS', 'SBIN.NS', 'BHARTIARTL.NS', 'L&T.NS', 'HINDUNILVR.NS',
+    'AXISBANK.NS', 'KOTAKBANK.NS', 'BAJFINANCE.NS', 'MARUTI.NS', 'ASIANPAINT.NS',
+    'SUNPHARMA.NS', 'HCLTECH.NS', 'TITAN.NS', 'TATASTEEL.NS', 'WIPRO.NS',
+    'ULTRACEMCO.NS', 'ONGC.NS', 'POWERGRID.NS', 'NTPC.NS', 'M&M.NS',
+    'BAJAJFINSV.NS', 'ADANIENT.NS', 'ADANIPORTS.NS', 'COALINDIA.NS', 'TATAMOTORS.NS',
+    'NESTLEIND.NS', 'GRASIM.NS', 'TECHM.NS', 'HINDALCO.NS', 'JSWSTEEL.NS',
+    'SBILIFE.NS', 'INDUSINDBK.NS', 'DRREDDY.NS', 'TATACONSUM.NS', 'EICHERMOT.NS',
+    'APOLLOHOSP.NS', 'DIVISLAB.NS', 'CIPLA.NS', 'BRITANNIA.NS', 'HEROMOTOCO.NS'
+];
+
 /**
  * Get real-time quote for a symbol.
  */
@@ -108,4 +120,42 @@ async function getIntraday(symbol) {
     return [];
 }
 
-module.exports = { getQuote, searchStocks, getIntraday };
+/**
+ * Get Top 20 Gainers and Losers from a predefined basket of Indian stocks.
+ */
+async function getTopMovers() {
+    try {
+        const quotes = await yahooFinance.quote(NIFTY_BASKET);
+
+        // Remove empty/missing prices
+        const validQuotes = quotes.filter(q => q && q.regularMarketChangePercent !== undefined && q.regularMarketPrice > 0);
+
+        // Map to our preferred format
+        const formattedQuotes = validQuotes.map(q => ({
+            symbol: q.symbol,
+            name: q.longName || q.shortName || q.symbol,
+            price: q.regularMarketPrice,
+            change: q.regularMarketChange,
+            changePercent: q.regularMarketChangePercent?.toFixed(2) + '%',
+            rawChangePercent: q.regularMarketChangePercent,
+            previousClose: q.regularMarketPreviousClose
+        }));
+
+        // Sort by change percentage (descending)
+        formattedQuotes.sort((a, b) => b.rawChangePercent - a.rawChangePercent);
+
+        // Get top 20 gainers and top 20 losers
+        const topGainers = formattedQuotes.slice(0, 20);
+        const topLosers = [...formattedQuotes].sort((a, b) => a.rawChangePercent - b.rawChangePercent).slice(0, 20);
+
+        return {
+            gainers: topGainers,
+            losers: topLosers
+        };
+    } catch (err) {
+        console.error('Error fetching top movers:', err.message);
+        return { gainers: [], losers: [] };
+    }
+}
+
+module.exports = { getQuote, searchStocks, getIntraday, getTopMovers };

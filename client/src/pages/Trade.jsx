@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import axios from '../api/axios';
 import { Search, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, IndianRupee, Activity } from 'lucide-react';
 import { toast } from 'react-hot-toast';
@@ -11,24 +12,38 @@ const Trade = () => {
     const [quote, setQuote] = useState(null);
     const [quantity, setQuantity] = useState(1);
     const [isLoading, setIsLoading] = useState(false);
+    const location = useLocation();
 
-    // New state for portfolio and watchlist
-    const [portfolioData, setPortfolioData] = useState({ holdings: [] });
     const [watchlistData, setWatchlistData] = useState([]);
     const [isInWatchlist, setIsInWatchlist] = useState(false);
 
+    // New state for top movers
+    const [topMovers, setTopMovers] = useState({ gainers: [], losers: [] });
+    const [moverTab, setMoverTab] = useState('gainers');
+    const [moversLoading, setMoversLoading] = useState(true);
+
     useEffect(() => {
         fetchUserData();
+        fetchTopMovers();
+        const interval = setInterval(fetchTopMovers, 60000); // 1 min refresh for movers
+        return () => clearInterval(interval);
     }, []);
+
+    const fetchTopMovers = async () => {
+        try {
+            const { data } = await axios.get('/stock/top-movers');
+            setTopMovers(data);
+        } catch (error) {
+            console.error('Error fetching top movers', error);
+        } finally {
+            setMoversLoading(false);
+        }
+    };
 
     const fetchUserData = async () => {
         try {
-            const [portfolioRes, watchlistRes] = await Promise.all([
-                axios.get('/portfolio'),
-                axios.get('/user/watchlist')
-            ]);
-            setPortfolioData(portfolioRes.data);
-            setWatchlistData(watchlistRes.data);
+            const { data } = await axios.get('/user/watchlist');
+            setWatchlistData(data);
         } catch (error) {
             console.error('Error fetching user data', error);
         }
@@ -39,6 +54,14 @@ const Trade = () => {
             setIsInWatchlist(watchlistData.some(w => w.symbol === selectedStock));
         }
     }, [selectedStock, watchlistData]);
+
+    useEffect(() => {
+        const params = new URLSearchParams(location.search);
+        const symbolParam = params.get('symbol');
+        if (symbolParam && symbolParam !== selectedStock && !isLoading) {
+            handleSelect(symbolParam);
+        }
+    }, [location.search]);
 
     const toggleWatchlist = async () => {
         if (!selectedStock) return;
@@ -176,17 +199,19 @@ const Trade = () => {
                         <div className="glass-card p-10 animate-in fade-in slide-in-from-left-4 duration-500 shadow-indigo-50 border-indigo-100">
                             <div className="flex flex-col md:flex-row justify-between items-start gap-8 border-b border-border-main pb-10 mb-10">
                                 <div>
-                                    <div className="flex items-center gap-4">
+                                    <div className="mb-3">
                                         <h2 className="text-3xl font-bold tracking-tight text-text-main uppercase">{quote.name}</h2>
-                                        <span className="symbol-badge bg-primary-light text-primary border-primary/20 uppercase">{quote.symbol}</span>
+                                    </div>
+                                    <div className="flex flex-wrap items-center gap-3">
+                                        <span className="symbol-badge bg-primary-light text-primary border-primary/20 uppercase py-1.5 px-3">{quote.symbol}</span>
                                         <button
                                             onClick={toggleWatchlist}
-                                            className={`ml-2 px-4 py-1.5 rounded-lg text-xs font-bold uppercase tracking-wider transition-colors border ${isInWatchlist
-                                                    ? 'bg-primary text-white border-primary'
-                                                    : 'bg-transparent text-primary border-primary/30 hover:bg-primary/10'
+                                            className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all border ${isInWatchlist
+                                                ? 'bg-primary text-white border-primary shadow-md shadow-primary/20 hover:bg-primary/90'
+                                                : 'bg-bg-card hover:bg-primary/10 text-primary border-primary/30'
                                                 }`}
                                         >
-                                            {isInWatchlist ? 'In Watchlist' : '+ Watchlist'}
+                                            {isInWatchlist ? '✓ IN WATCHLIST' : '+ WATCHLIST'}
                                         </button>
                                     </div>
                                     <div className="flex items-center gap-6 mt-6">
@@ -219,45 +244,71 @@ const Trade = () => {
                             <StockChart symbol={selectedStock} />
                         </div>
                     ) : (
-                        <div className="glass-card flex flex-col items-center justify-center bg-bg-main/50 border-primary/10 shadow-none p-10 min-h-[450px]">
+                        <div className="glass-card bg-bg-main/50 border-primary/10 shadow-none p-10 min-h-[450px]">
                             <div className="w-full">
-                                <h3 className="text-2xl font-bold tracking-tight mb-8 text-text-main uppercase">Your Active Positions</h3>
+                                <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+                                    <h3 className="text-2xl font-bold tracking-tight text-text-main uppercase flex items-center gap-3">
+                                        <Activity className="text-primary" size={24} /> Market Movers
+                                    </h3>
 
-                                {portfolioData.holdings.length === 0 ? (
-                                    <div className="flex flex-col items-center text-center gap-6 py-10">
-                                        <div className="p-4 bg-primary/10 rounded-2xl">
-                                            <IndianRupee className="text-primary" size={32} />
-                                        </div>
-                                        <div>
-                                            <h3 className="text-xl font-bold text-text-main mb-3">No Active Trades</h3>
-                                            <p className="text-sm text-text-muted font-medium leading-relaxed max-w-md mx-auto">
-                                                Search for an asset above to execute a trade. Your portfolio positions will appear here.
-                                            </p>
-                                        </div>
+                                    <div className="flex bg-bg-card border border-border-main rounded-xl p-1 shadow-sm">
+                                        <button
+                                            onClick={() => setMoverTab('gainers')}
+                                            className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${moverTab === 'gainers'
+                                                ? 'bg-accent-up/10 text-accent-up shadow-sm'
+                                                : 'text-text-muted hover:text-text-main'
+                                                }`}
+                                        >
+                                            Top Gainers
+                                        </button>
+                                        <button
+                                            onClick={() => setMoverTab('losers')}
+                                            className={`px-6 py-2 rounded-lg text-xs font-bold uppercase tracking-widest transition-all ${moverTab === 'losers'
+                                                ? 'bg-accent-down/10 text-accent-down shadow-sm'
+                                                : 'text-text-muted hover:text-text-main'
+                                                }`}
+                                        >
+                                            Top Losers
+                                        </button>
+                                    </div>
+                                </div>
+
+                                {moversLoading ? (
+                                    <div className="py-20 flex justify-center">
+                                        <div className="w-8 h-8 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
                                     </div>
                                 ) : (
                                     <div className="overflow-x-auto">
                                         <table className="w-full">
                                             <thead>
                                                 <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main">
-                                                    <th className="pb-4">Asset</th>
-                                                    <th className="pb-4">Qty</th>
-                                                    <th className="pb-4 text-right">Avg Price</th>
-                                                    <th className="pb-4 text-right">Returns</th>
+                                                    <th className="pb-4">Stock Asset</th>
+                                                    <th className="pb-4 text-right">Market Price</th>
+                                                    <th className="pb-4 text-right">Change</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-border-light">
-                                                {portfolioData.holdings.map((h) => (
-                                                    <tr key={h.stockSymbol} className="group hover:bg-bg-card transition-colors cursor-pointer" onClick={() => handleSelect(h.stockSymbol)}>
+                                                {topMovers[moverTab].map((m) => (
+                                                    <tr
+                                                        key={m.symbol}
+                                                        className="group hover:bg-bg-card transition-colors cursor-pointer"
+                                                        onClick={() => handleSelect(m.symbol)}
+                                                    >
                                                         <td className="py-4">
                                                             <div className="flex flex-col">
-                                                                <span className="font-bold text-primary group-hover:underline">{h.stockSymbol}</span>
+                                                                <span className="symbol-badge w-fit mb-1 bg-primary-light text-primary border-primary/20 group-hover:bg-primary group-hover:text-white transition-all">{m.symbol}</span>
+                                                                <span className="text-xs font-bold text-text-muted line-clamp-1 opacity-80">{m.name}</span>
                                                             </div>
                                                         </td>
-                                                        <td className="py-4 font-bold text-text-main">{h.quantity}</td>
-                                                        <td className="py-4 text-right font-medium text-text-light">₹{h.avgPrice.toLocaleString('en-IN')}</td>
-                                                        <td className={`py-4 text-right font-bold ${h.pnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
-                                                            {h.pnl >= 0 ? '+' : ''}₹{h.pnl.toLocaleString('en-IN')}
+                                                        <td className="py-4 text-right font-bold text-text-main">
+                                                            ₹{m.price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
+                                                        </td>
+                                                        <td className={`py-4 text-right font-bold ${moverTab === 'gainers' ? 'text-accent-up' : 'text-accent-down'}`}>
+                                                            <div className="flex items-center justify-end gap-1">
+                                                                {moverTab === 'gainers' ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
+                                                                {moverTab === 'gainers' ? '+' : ''}{m.change.toFixed(2)}
+                                                            </div>
+                                                            <div className="text-[11px] font-bold opacity-70">({m.changePercent})</div>
                                                         </td>
                                                     </tr>
                                                 ))}

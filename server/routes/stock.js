@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-const { getQuote, searchStocks, getIntraday } = require('../utils/stockService');
+const { getQuote, searchStocks, getIntraday, getTopMovers } = require('../utils/stockService');
 
 const router = express.Router();
 
@@ -37,6 +37,16 @@ router.get('/intraday/:symbol', auth, async (req, res) => {
         res.json(data);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching intraday data' });
+    }
+});
+
+// GET /api/stock/top-movers
+router.get('/top-movers', auth, async (req, res) => {
+    try {
+        const movers = await getTopMovers();
+        res.json(movers);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching top movers' });
     }
 });
 
