@@ -3,6 +3,7 @@ import Sidebar from './Sidebar';
 import { useTheme } from '../context/ThemeContext';
 import { Sun, Moon, Clock } from 'lucide-react';
 import { useState, useEffect } from 'react';
+import { isMarketOpen } from '../utils/market';
 
 const Layout = () => {
     const { dark, toggleTheme } = useTheme();
@@ -20,8 +21,17 @@ const Layout = () => {
                 <header className="h-16 border-b border-border-main flex items-center justify-between px-8 bg-bg-white/80 backdrop-blur-md sticky top-0 z-[90]">
                     <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-text-muted uppercase tracking-widest hidden sm:inline">Market Status</span>
-                        <div className="w-2 h-2 rounded-full bg-accent-up animate-pulse"></div>
-                        <span className="text-xs font-medium text-accent-up uppercase">Live</span>
+                        {isMarketOpen() ? (
+                            <>
+                                <div className="w-2 h-2 rounded-full bg-accent-up animate-pulse"></div>
+                                <span className="text-xs font-medium text-accent-up uppercase">Live</span>
+                            </>
+                        ) : (
+                            <>
+                                <div className="w-2 h-2 rounded-full bg-accent-down"></div>
+                                <span className="text-xs font-medium text-accent-down uppercase">Closed</span>
+                            </>
+                        )}
                     </div>
                     <div className="flex items-center gap-4">
                         <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-bg-main border border-border-main text-text-muted text-sm font-medium">
