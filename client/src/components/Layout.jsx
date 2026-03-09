@@ -1,10 +1,17 @@
 import { Outlet } from 'react-router-dom';
 import Sidebar from './Sidebar';
 import { useTheme } from '../context/ThemeContext';
-import { Sun, Moon } from 'lucide-react';
+import { Sun, Moon, Clock } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const Layout = () => {
     const { dark, toggleTheme } = useTheme();
+    const [currentTime, setCurrentTime] = useState(new Date());
+
+    useEffect(() => {
+        const timer = setInterval(() => setCurrentTime(new Date()), 1000);
+        return () => clearInterval(timer);
+    }, []);
 
     return (
         <div className="flex min-h-screen bg-bg-main">
@@ -17,6 +24,15 @@ const Layout = () => {
                         <span className="text-xs font-medium text-accent-up uppercase">Live</span>
                     </div>
                     <div className="flex items-center gap-4">
+                        <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-bg-main border border-border-main text-text-muted text-sm font-medium">
+                            <Clock size={16} />
+                            {currentTime.toLocaleTimeString('en-IN', {
+                                hour: '2-digit',
+                                minute: '2-digit',
+                                second: '2-digit',
+                                hour12: true
+                            }).toUpperCase()}
+                        </div>
                         <button
                             onClick={toggleTheme}
                             className="p-2 rounded-xl bg-bg-main border border-border-main text-text-muted hover:text-primary hover:bg-primary-light transition-all"
