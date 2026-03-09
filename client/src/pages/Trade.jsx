@@ -4,6 +4,7 @@ import axios from '../api/axios';
 import { Search, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, IndianRupee, Activity } from 'lucide-react';
 import { toast } from 'react-hot-toast';
 import StockChart from '../components/StockChart';
+import { isMarketOpen } from '../utils/market';
 
 const Trade = () => {
     const [query, setQuery] = useState('');
@@ -364,18 +365,23 @@ const Trade = () => {
                                 </div>
 
                                 <div className="grid grid-cols-1 gap-4 pt-2">
+                                    {!isMarketOpen() && (
+                                        <div className="bg-accent-down/10 text-accent-down font-bold text-sm p-4 text-center rounded-xl border border-accent-down/20 mb-2">
+                                            Market is closed. Trading hours are 9:15 AM to 3:30 PM (IST), Mon-Fri.
+                                        </div>
+                                    )}
                                     <button
                                         onClick={() => executeTrade('BUY')}
-                                        className="btn-primary py-5 text-xl font-bold uppercase tracking-tight flex items-center justify-center gap-3 shadow-emerald-200/20 bg-emerald-500 hover:bg-emerald-600 border-emerald-400 text-white"
-                                        disabled={isLoading}
+                                        className="btn-primary py-5 text-xl font-bold uppercase tracking-tight flex items-center justify-center gap-3 shadow-emerald-200/20 bg-emerald-500 hover:bg-emerald-600 border-emerald-400 text-white disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isLoading || !isMarketOpen()}
                                     >
                                         <TrendingUp size={24} />
                                         Buy Asset
                                     </button>
                                     <button
                                         onClick={() => executeTrade('SELL')}
-                                        className="btn-outline py-5 text-xl font-bold uppercase tracking-tight flex items-center justify-center gap-3 border-accent-down text-accent-down hover:bg-accent-down/5"
-                                        disabled={isLoading}
+                                        className="btn-outline py-5 text-xl font-bold uppercase tracking-tight flex items-center justify-center gap-3 border-accent-down text-accent-down hover:bg-accent-down/5 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        disabled={isLoading || !isMarketOpen()}
                                     >
                                         <TrendingDown size={24} />
                                         Sell Asset

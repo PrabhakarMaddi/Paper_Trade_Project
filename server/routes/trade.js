@@ -5,6 +5,7 @@ const Trade = require('../models/Trade');
 const Portfolio = require('../models/Portfolio');
 const User = require('../models/User');
 const { getQuote } = require('../utils/stockService');
+const { isMarketOpen } = require('../utils/market');
 
 const router = express.Router();
 
@@ -25,6 +26,11 @@ router.post(
 
             const { symbol, quantity } = req.body;
             const upperSymbol = symbol.toUpperCase();
+
+            // Check if market is open
+            if (!isMarketOpen()) {
+                return res.status(400).json({ message: 'Market is closed. Trading hours are 9:15 AM to 3:30 PM IST, Monday to Friday.' });
+            }
 
             // Get current price
             const quote = await getQuote(upperSymbol);
@@ -106,6 +112,11 @@ router.post(
 
             const { symbol, quantity } = req.body;
             const upperSymbol = symbol.toUpperCase();
+
+            // Check if market is open
+            if (!isMarketOpen()) {
+                return res.status(400).json({ message: 'Market is closed. Trading hours are 9:15 AM to 3:30 PM IST, Monday to Friday.' });
+            }
 
             // Check holdings
             const portfolio = await Portfolio.findOne({ userId: req.user._id, stockSymbol: upperSymbol });
