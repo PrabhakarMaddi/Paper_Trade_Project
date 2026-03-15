@@ -15,6 +15,10 @@ const Dashboard = () => {
     const [results, setResults] = useState([]);
     const [isSearching, setIsSearching] = useState(false);
 
+    // Insight state
+    const [insight, setInsight] = useState({ text: 'Analyzing market trends...', symbol: null });
+    const [insightLoading, setInsightLoading] = useState(true);
+
     useEffect(() => {
         fetchDashboard();
         const interval = setInterval(fetchDashboard, 10000); // 10 seconds
@@ -54,9 +58,10 @@ const Dashboard = () => {
 
     const fetchDashboard = async () => {
         try {
-            const [portfolioRes, watchlistRes] = await Promise.all([
+            const [portfolioRes, watchlistRes, moversRes] = await Promise.all([
                 axios.get('/portfolio'),
-                axios.get('/user/watchlist')
+                axios.get('/user/watchlist'),
+                axios.get('/stock/top-movers').catch(() => ({ data: { gainers: [], losers: [] } }))
             ]);
             setData(portfolioRes.data || {});
 
@@ -66,12 +71,46 @@ const Dashboard = () => {
                 watchlistRes.data ||
                 []
             );
+
+            // Generate Insight
+            generateInsight(moversRes.data);
+
         } catch (error) {
             console.error('Error fetching dashboard', error);
             setData(null);
             setWatchlistData([]);
         } finally {
             setLoading(false);
+            setInsightLoading(false);
+        }
+    };
+
+    const generateInsight = (movers) => {
+        if (!movers || (!movers.gainers?.length && !movers.losers?.length)) {
+            setInsight({ text: 'Market is currently flat. Hold positions and monitor.', symbol: null });
+            return;
+        }
+
+        const topGainer = movers.gainers[0];
+        const topLoser = movers.losers[0];
+
+        if (topGainer && topGainer.rawChangePercent > 2) {
+             setInsight({ 
+                 text: `Markets are showing strong momentum. Consider reviewing **${topGainer.name}** (${topGainer.symbol}) which is up by ${topGainer.changePercent}.`,
+                 symbol: topGainer.symbol
+             });
+        } else if (topLoser && topLoser.rawChangePercent < -2) {
+             setInsight({
+                 text: `Market is facing downward pressure. **${topLoser.name}** (${topLoser.symbol}) has dropped by ${topLoser.changePercent}. Keep an eye on value opportunities.`,
+                 symbol: topLoser.symbol
+             });
+        } else if (topGainer) {
+             setInsight({
+                 text: `Market volatility is low. **${topGainer.name}** (${topGainer.symbol}) is currently leading with modest gains of ${topGainer.changePercent}.`,
+                 symbol: topGainer.symbol
+             });
+        } else {
+             setInsight({ text: 'Keep monitoring your watchlist for sudden breakouts or breakdowns.', symbol: null });
         }
     };
 
@@ -273,12 +312,26 @@ const Dashboard = () => {
                         <h3 className="text-lg font-bold tracking-tight mb-4 flex items-center gap-3 text-text-main">
                             <Activity className="text-primary" size={20} /> MARKET INSIGHT
                         </h3>
-                        <p className="text-sm text-text-muted font-medium leading-relaxed">
-                            Markets are showing strong momentum in the **infrastructure** sector. Consider reviewing your positions in **Larsen & Toubro** or **NTPC**.
-                        </p>
-                        <button className="btn-primary w-full mt-6 py-3 text-sm">
-                            Research Sector
-                        </button>
+                        {insightLoading ? (
+                            <div className="flex justify-center items-center h-20">
+                                <div className="w-6 h-6 border-2 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+                            </div>
+                        ) : (
+                            <>
+                                <p className="text-sm text-text-muted font-medium leading-relaxed">
+                                    {insight.text.split('**').map((part, i) => 
+                                        i % 2 === 1 ? <strong key={i} className="text-text-main">{part}</strong> : part
+                                    )}
+                                </p>
+                                <button 
+                                    className="btn-primary w-full mt-6 py-3 text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+                                    disabled={!insight.symbol}
+                                    onClick={() => insight.symbol && navigate(`/trade?symbol=${insight.symbol}`)}
+                                >
+                                    {insight.symbol ? `Trade ${insight.symbol}` : 'Market Flat'}
+                                </button>
+                            </>
+                        )}
                     </div>
 
                     <div className="glass-card border-border-main p-8">
