@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from '../api/axios';
 import { TrendingUp, TrendingDown, Info, Briefcase, IndianRupee, PieChart as PieChartIcon } from 'lucide-react';
 
 const Portfolio = () => {
     const [data, setData] = useState(null);
     const [loading, setLoading] = useState(true);
+    const navigate = useNavigate();
 
     useEffect(() => {
         fetchPortfolio();
@@ -98,7 +100,11 @@ const Portfolio = () => {
                                 </tr>
                             ) : (
                                 holdings.map((h) => (
-                                    <tr key={h.stockSymbol} className="group hover:bg-bg-main transition-all">
+                                    <tr 
+                                        key={h.stockSymbol} 
+                                        className="group hover:bg-bg-main transition-all cursor-pointer"
+                                        onClick={() => navigate(`/trade?symbol=${h.stockSymbol}`)}
+                                    >
                                         <td className="px-8 py-7">
                                             <div className="flex flex-col">
                                                 <span className="symbol-badge w-fit mb-2 bg-primary-light text-primary border-primary/10 group-hover:bg-primary group-hover:text-white transition-all duration-300">
