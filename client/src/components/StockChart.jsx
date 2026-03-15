@@ -41,6 +41,15 @@ const StockChart = ({ symbol }) => {
         </div>
     );
 
+    if (!data || data.length === 0) return (
+        <div className="h-[350px] flex flex-col items-center justify-center bg-bg-main/50 rounded-3xl border border-border-main">
+            <div className="w-10 h-10 mb-3 bg-bg-card rounded-full flex items-center justify-center border border-border-light shadow-inner">
+                <span className="text-text-muted">📊</span>
+            </div>
+            <span className="text-xs font-bold uppercase tracking-[0.2em] text-text-muted">No Chart Data Available</span>
+        </div>
+    );
+
     return (
         <div className="h-[400px] w-full pt-4">
             <ResponsiveContainer width="100%" height="100%">

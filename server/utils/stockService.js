@@ -97,13 +97,19 @@ async function getIntraday(symbol) {
     const searchSymbol = upperSymbol.includes('.') ? upperSymbol : `${upperSymbol}.NS`;
 
     try {
-        // Fetch 1 day of 5-minute intervals
-        const period1 = new Date(Date.now() - 24 * 60 * 60 * 1000);
+        // Fetch 7 days of 5-minute intervals to ensure we have data even over long weekends
+        const period1 = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
         const result = await yahooFinance.chart(searchSymbol, { period1, interval: '5m' });
 
         if (result && result.quotes && result.quotes.length > 0) {
-            return result.quotes
-                .filter(q => q.close !== null)
+            const validQuotes = result.quotes.filter(q => q.close !== null && q.date);
+            if (validQuotes.length === 0) return [];
+
+            // Get the date of the very last quote
+            const lastDateString = validQuotes[validQuotes.length - 1].date.toISOString().split('T')[0];
+
+            return validQuotes
+                .filter(q => q.date.toISOString().startsWith(lastDateString))
                 .map(q => ({
                     timestamp: q.date.toISOString(),
                     open: q.open,
