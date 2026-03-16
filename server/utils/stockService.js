@@ -164,4 +164,59 @@ async function getTopMovers() {
     }
 }
 
-module.exports = { getQuote, searchStocks, getIntraday, getTopMovers };
+/**
+ * Get historical chart data for various ranges.
+ */
+async function getHistoricalData(symbol, range) {
+    const upperSymbol = symbol.toUpperCase();
+    const searchSymbol = upperSymbol.includes('.') ? upperSymbol : `${upperSymbol}.NS`;
+
+    let period1;
+    let interval = '1d';
+
+    const now = new Date();
+    switch (range) {
+        case '1M':
+            period1 = new Date(now.setMonth(now.getMonth() - 1));
+            break;
+        case '3M':
+            period1 = new Date(now.setMonth(now.getMonth() - 3));
+            break;
+        case '6M':
+            period1 = new Date(now.setMonth(now.getMonth() - 6));
+            break;
+        case '1Y':
+            period1 = new Date(now.setFullYear(now.getFullYear() - 1));
+            break;
+        case '3Y':
+            period1 = new Date(now.setFullYear(now.getFullYear() - 3));
+            interval = '1wk'; // Use weekly data for longer periods to keep it performant
+            break;
+        default:
+            period1 = new Date(now.setMonth(now.getMonth() - 1));
+    }
+
+    try {
+        const result = await yahooFinance.chart(searchSymbol, { period1, interval });
+
+        if (result && result.quotes && result.quotes.length > 0) {
+            return result.quotes
+                .filter(q => q.close !== null && q.date)
+                .map(q => ({
+                    timestamp: q.date.toISOString(),
+                    open: q.open,
+                    high: q.high,
+                    low: q.low,
+                    close: q.close,
+                    volume: q.volume
+                }));
+        }
+    } catch (err) {
+        console.error(`Yahoo Finance Historical Chart Error [${upperSymbol}, ${range}]:`, err.message);
+    }
+
+    return [];
+}
+
+module.exports = { getQuote, searchStocks, getIntraday, getTopMovers, getHistoricalData };
+

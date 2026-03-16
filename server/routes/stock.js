@@ -1,6 +1,6 @@
 const express = require('express');
 const auth = require('../middleware/auth');
-const { getQuote, searchStocks, getIntraday, getTopMovers } = require('../utils/stockService');
+const { getQuote, searchStocks, getIntraday, getTopMovers, getHistoricalData } = require('../utils/stockService');
 
 const router = express.Router();
 
@@ -47,6 +47,20 @@ router.get('/top-movers', auth, async (req, res) => {
         res.json(movers);
     } catch (error) {
         res.status(500).json({ message: 'Error fetching top movers' });
+    }
+});
+
+// GET /api/stock/historical/:symbol
+router.get('/historical/:symbol', auth, async (req, res) => {
+    try {
+        const { range } = req.query;
+        const data = await getHistoricalData(req.params.symbol, range || '1M');
+        if (!data) {
+            return res.status(404).json({ message: 'Stock not found' });
+        }
+        res.json(data);
+    } catch (error) {
+        res.status(500).json({ message: 'Error fetching historical data' });
     }
 });
 
