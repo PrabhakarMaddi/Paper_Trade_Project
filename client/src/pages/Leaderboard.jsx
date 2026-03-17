@@ -31,17 +31,17 @@ const Leaderboard = () => {
     return (
         <div className="space-y-12">
             <div className="text-center space-y-4">
-                <h1 className="text-5xl font-bold tracking-tighter text-text-main uppercase">Elite Traders</h1>
-                <p className="text-text-muted font-bold uppercase text-xs tracking-[0.4em]">Ranking the top 1% of the Indian Market</p>
+                <h1 className="text-3xl md:text-5xl font-bold tracking-tighter text-text-main uppercase">Elite Traders</h1>
+                <p className="text-text-muted font-bold uppercase text-[10px] md:text-xs tracking-[0.2em] md:tracking-[0.4em]">Ranking the top 1% of the Indian Market</p>
             </div>
 
             {/* Podium */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-10 items-end max-w-[1100px] mx-auto pb-12">
                 {users.slice(0, 3).map((user, index) => {
                     const ranks = [
-                        { pos: 1, color: 'text-yellow-500', bg: 'bg-yellow-50', border: 'border-yellow-200', icon: <Trophy size={52} />, h: 'h-72', shadow: 'shadow-yellow-100' },
-                        { pos: 2, color: 'text-slate-400', bg: 'bg-slate-50', border: 'border-slate-200', icon: <Medal size={42} />, h: 'h-60', shadow: 'shadow-slate-100' },
-                        { pos: 3, color: 'text-orange-500', bg: 'bg-orange-50', border: 'border-orange-200', icon: <Award size={38} />, h: 'h-48', shadow: 'shadow-orange-100' }
+                        { pos: 1, color: 'text-yellow-500', bg: 'bg-yellow-50', border: 'border-yellow-200', icon: <Trophy size={48} />, h: 'h-60 md:h-72', shadow: 'shadow-yellow-100' },
+                        { pos: 2, color: 'text-slate-400', bg: 'bg-slate-50', border: 'border-slate-200', icon: <Medal size={38} />, h: 'h-48 md:h-60', shadow: 'shadow-slate-100' },
+                        { pos: 3, color: 'text-orange-500', bg: 'bg-orange-50', border: 'border-orange-200', icon: <Award size={32} />, h: 'h-40 md:h-48', shadow: 'shadow-orange-100' }
                     ];
                     const r = index === 0 ? ranks[0] : (index === 1 ? ranks[1] : ranks[2]);
                     const order = index === 0 ? 'md:order-2' : (index === 1 ? 'md:order-1' : 'md:order-3');
@@ -64,40 +64,40 @@ const Leaderboard = () => {
             </div>
 
             <div className="glass-card p-0 overflow-hidden border border-border-main shadow-2xl max-w-[950px] mx-auto">
-                <div className="bg-bg-main px-10 py-6 border-b border-border-main flex items-center justify-between">
-                    <h3 className="font-bold text-lg tracking-tight text-text-main uppercase">Cumulative Rankings</h3>
+                <div className="bg-bg-main px-6 md:px-10 py-6 border-b border-border-main flex items-center justify-between">
+                    <h3 className="font-bold text-base md:text-lg tracking-tight text-text-main uppercase">Cumulative Rankings</h3>
                     <div className="flex items-center gap-2 text-primary font-bold text-xs uppercase tracking-widest">
                         <Star className="text-yellow-500 fill-yellow-500" size={18} /> Market Leaders
                     </div>
                 </div>
                 <div className="divide-y divide-border-light">
                     {users.map((user, index) => (
-                        <div key={user.name} className="px-10 py-7 flex items-center justify-between group hover:bg-bg-main transition-all">
-                            <div className="flex items-center gap-10">
-                                <span className={`w-10 font-bold text-3xl tracking-tighter ${index < 3 ? 'text-primary' : 'text-text-light'}`}>
+                         <div key={user.name} className="px-6 md:px-10 py-5 md:py-7 flex items-center justify-between group hover:bg-bg-main transition-all">
+                            <div className="flex items-center gap-4 md:gap-10">
+                                <span className={`w-6 md:w-10 font-bold text-xl md:text-3xl tracking-tighter ${index < 3 ? 'text-primary' : 'text-text-light'}`}>
                                     {index + 1 < 10 ? `0${index + 1}` : index + 1}
                                 </span>
-                                <div className="flex items-center gap-4">
-                                    <div className="w-12 h-12 rounded-full bg-border-light flex items-center justify-center font-bold text-primary border border-border-main uppercase">
+                                <div className="flex items-center gap-3 md:gap-4">
+                                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-border-light flex items-center justify-center font-bold text-primary border border-border-main uppercase text-sm md:text-base">
                                         {user.name.charAt(0)}
                                     </div>
                                     <div>
-                                        <h4 className="font-bold text-xl text-text-main tracking-tight uppercase">{user.name}</h4>
-                                        <p className="text-[11px] font-bold uppercase tracking-widest text-text-light mt-0.5 flex items-center gap-2">
-                                            <span className="w-2 h-2 rounded-full bg-accent-up animate-pulse"></span> Portfolio Status: High Growth
+                                        <h4 className="font-bold text-lg md:text-xl text-text-main tracking-tight uppercase truncate max-w-[100px] md:max-w-none">{user.name}</h4>
+                                        <p className="text-[10px] md:text-[11px] font-bold uppercase tracking-widest text-text-light mt-0.5 flex items-center gap-2">
+                                            <span className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-accent-up animate-pulse"></span> <span className="hidden sm:inline">Portfolio Status:</span> Growth
                                         </p>
                                     </div>
                                 </div>
                             </div>
-                            <div className="flex items-center gap-16 text-right">
-                                <div className="hidden lg:block">
+                            <div className="flex items-center gap-6 md:gap-16 text-right">
+                                <div className="hidden sm:block">
                                     <p className="text-[10px] font-bold uppercase tracking-widest text-text-light mb-1">Valuation</p>
-                                    <p className="font-bold text-text-main text-lg">₹{user.netWorth.toLocaleString('en-IN')}</p>
+                                    <p className="font-bold text-text-main text-base md:text-lg">₹{user.netWorth.toLocaleString('en-IN')}</p>
                                 </div>
                                 <div>
-                                    <p className="text-[10px] font-bold uppercase tracking-widest text-text-light mb-1">Performance</p>
-                                    <div className={`flex items-center gap-2 font-bold text-2xl tracking-tighter ${user.totalReturn >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
-                                        {user.totalReturn >= 0 ? <ArrowUpRight size={22} className="text-accent-up" /> : null}
+                                    <p className="text-[10px] font-bold uppercase tracking-widest text-text-light mb-1">Return</p>
+                                    <div className={`flex items-center gap-1 md:gap-2 font-bold text-xl md:text-2xl tracking-tighter ${user.totalReturn >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
+                                        {user.totalReturn >= 0 ? <ArrowUpRight size={18} className="md:w-[22px] md:h-[22px]" /> : null}
                                         {user.returnPercent}%
                                     </div>
                                 </div>

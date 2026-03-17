@@ -17,8 +17,8 @@ const Layout = () => {
     return (
         <div className="flex min-h-screen bg-bg-main">
             <Sidebar />
-            <main className="flex-1 ml-[260px] flex flex-col max-lg:ml-[80px]">
-                <header className="h-16 border-b border-border-main flex items-center justify-between px-8 bg-bg-white/80 backdrop-blur-md sticky top-0 z-[90]">
+            <main className="flex-1 ml-[80px] lg:ml-[260px] flex flex-col transition-all duration-300">
+                <header className="h-16 border-b border-border-main flex items-center justify-between px-4 md:px-8 bg-bg-white/80 backdrop-blur-md sticky top-0 z-[90]">
                     <div className="flex items-center gap-2">
                         <span className="text-xs font-bold text-text-muted uppercase tracking-widest hidden sm:inline">Market Status</span>
                         {isMarketOpen() ? (
@@ -51,7 +51,7 @@ const Layout = () => {
                         </button>
                     </div>
                 </header>
-                <div className="p-8 max-w-[1400px] mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
+                <div className="p-4 md:p-8 max-w-[1400px] mx-auto w-full animate-in fade-in slide-in-from-bottom-4 duration-500">
                     <Outlet />
                 </div>
             </main>

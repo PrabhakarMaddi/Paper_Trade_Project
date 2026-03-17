@@ -147,8 +147,8 @@ const Trade = () => {
     };
 
     return (
-        <div className="space-y-10">
-            <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl text-text-main uppercase">Market Execution</h1>
+        <div className="space-y-6 md:y-10">
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-text-main uppercase">Market Execution</h1>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
                 <div className="lg:col-span-2 space-y-10">
@@ -158,8 +158,8 @@ const Trade = () => {
                             <Search className="text-primary" size={28} />
                             <input
                                 type="text"
-                                placeholder="Search NIFTY 50 Stocks (e.g. RELIANCE, TCS, INFY)..."
-                                className="bg-transparent border-none outline-none text-xl font-bold w-full text-text-main placeholder:text-text-light"
+                                placeholder="Search NIFTY 50 Stocks..."
+                                className="bg-transparent border-none outline-none text-lg md:text-xl font-bold w-full text-text-main placeholder:text-text-light"
                                 value={query}
                                 onChange={(e) => setQuery(e.target.value)}
                             />
@@ -198,16 +198,16 @@ const Trade = () => {
                     {/* Asset Visualization */}
                     {selectedStock && quote ? (
                         <div className="glass-card p-10 animate-in fade-in slide-in-from-left-4 duration-500 shadow-indigo-50 border-indigo-100">
-                            <div className="flex flex-col md:flex-row justify-between items-start gap-8 border-b border-border-main pb-10 mb-10">
+                            <div className="flex flex-col md:flex-row justify-between items-start gap-6 md:gap-8 border-b border-border-main pb-8 md:pb-10 mb-8 md:mb-10">
                                 <div>
-                                    <div className="mb-3">
-                                        <h2 className="text-3xl font-bold tracking-tight text-text-main uppercase">{quote.name}</h2>
+                                    <div className="mb-2 md:mb-3">
+                                        <h2 className="text-2xl md:text-3xl font-bold tracking-tight text-text-main uppercase">{quote.name}</h2>
                                     </div>
-                                    <div className="flex flex-wrap items-center gap-3">
-                                        <span className="symbol-badge bg-primary-light text-primary border-primary/20 uppercase py-1.5 px-3">{quote.symbol}</span>
+                                    <div className="flex flex-wrap items-center gap-2 md:gap-3">
+                                        <span className="symbol-badge bg-primary-light text-primary border-primary/20 uppercase py-1 px-2 md:py-1.5 md:px-3 text-[10px] md:text-xs">{quote.symbol}</span>
                                         <button
                                             onClick={toggleWatchlist}
-                                            className={`px-4 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-widest transition-all border ${isInWatchlist
+                                            className={`px-3 md:px-4 py-1 md:py-1.5 rounded-full text-[9px] md:text-[11px] font-bold uppercase tracking-widest transition-all border ${isInWatchlist
                                                 ? 'bg-primary text-white border-primary shadow-md shadow-primary/20 hover:bg-primary/90'
                                                 : 'bg-bg-card hover:bg-primary/10 text-primary border-primary/30'
                                                 }`}
@@ -215,15 +215,15 @@ const Trade = () => {
                                             {isInWatchlist ? '✓ IN WATCHLIST' : '+ WATCHLIST'}
                                         </button>
                                     </div>
-                                    <div className="flex items-center gap-6 mt-6">
-                                        <span className="text-5xl font-bold tracking-tighter text-text-main">₹{quote.price.toLocaleString('en-IN')}</span>
-                                        <div className={`flex items-center gap-2 font-bold text-xl ${quote.change >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
-                                            {quote.change >= 0 ? <TrendingUp size={24} /> : <TrendingDown size={24} />}
+                                    <div className="flex items-center gap-4 md:gap-6 mt-4 md:mt-6">
+                                        <span className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-text-main">₹{quote.price.toLocaleString('en-IN')}</span>
+                                        <div className={`flex items-center gap-1 md:gap-2 font-bold text-lg md:text-xl ${quote.change >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
+                                            {quote.change >= 0 ? <TrendingUp size={20} /> : <TrendingDown size={20} />}
                                             {quote.change.toFixed(2)} ({quote.changePercent})
                                         </div>
                                     </div>
                                 </div>
-                                <div className="grid grid-cols-2 gap-x-12 gap-y-3 text-right max-md:text-left bg-bg-main p-6 rounded-2xl border border-border-main">
+                                <div className="grid grid-cols-2 gap-x-6 md:gap-x-12 gap-y-3 text-right max-md:text-left bg-bg-main p-4 md:p-6 rounded-2xl border border-border-main w-full md:w-auto">
                                     <div>
                                         <p className="text-[10px] font-bold uppercase tracking-widest text-text-light">Prev Close</p>
                                         <p className="font-bold text-text-main">₹{quote.previousClose.toLocaleString('en-IN')}</p>
@@ -248,7 +248,7 @@ const Trade = () => {
                         <div className="glass-card bg-bg-main/50 border-primary/10 shadow-none p-10 min-h-[450px]">
                             <div className="w-full">
                                 <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
-                                    <h3 className="text-2xl font-bold tracking-tight text-text-main uppercase flex items-center gap-3">
+                                    <h3 className="text-xl md:text-2xl font-bold tracking-tight text-text-main uppercase flex items-center gap-3">
                                         <Activity className="text-primary" size={24} /> Market Movers
                                     </h3>
 
@@ -282,10 +282,10 @@ const Trade = () => {
                                     <div className="overflow-x-auto">
                                         <table className="w-full">
                                             <thead>
-                                                <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main">
+                                                <tr className="text-left text-text-light text-[10px] md:text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main">
                                                     <th className="pb-4">Stock Asset</th>
                                                     <th className="pb-4 text-right">Market Price</th>
-                                                    <th className="pb-4 text-right">Change</th>
+                                                    <th className="pb-4 text-right hidden sm:table-cell">Change</th>
                                                 </tr>
                                             </thead>
                                             <tbody className="divide-y divide-border-light">
@@ -304,7 +304,7 @@ const Trade = () => {
                                                         <td className="py-4 text-right font-bold text-text-main">
                                                             ₹{m.price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                                         </td>
-                                                        <td className={`py-4 text-right font-bold ${moverTab === 'gainers' ? 'text-accent-up' : 'text-accent-down'}`}>
+                                                        <td className={`py-4 text-right font-bold ${moverTab === 'gainers' ? 'text-accent-up' : 'text-accent-down'} hidden sm:table-cell`}>
                                                             <div className="flex items-center justify-end gap-1">
                                                                 {moverTab === 'gainers' ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
                                                                 {moverTab === 'gainers' ? '+' : ''}{m.change.toFixed(2)}
@@ -325,8 +325,8 @@ const Trade = () => {
                 {/* Action Panel */}
                 <div className="space-y-8">
                     {selectedStock && quote ? (
-                        <div className="glass-card sticky top-24 border-primary/20 animate-in fade-in slide-in-from-right-4 duration-500 p-8">
-                            <h3 className="text-2xl font-bold tracking-tight mb-8 text-text-main uppercase">Execute Order</h3>
+                        <div className="glass-card sticky top-24 border-primary/20 animate-in fade-in slide-in-from-right-4 duration-500 p-6 md:p-8">
+                            <h3 className="text-xl md:text-2xl font-bold tracking-tight mb-6 md:mb-8 text-text-main uppercase">Execute Order</h3>
                             <div className="space-y-8">
                                 <div className="flex justify-between items-center bg-bg-main p-4 rounded-xl border border-border-main">
                                     <span className="text-xs font-bold uppercase tracking-widest text-text-muted">Market Price</span>
@@ -339,7 +339,7 @@ const Trade = () => {
                                         <input
                                             type="number"
                                             min="1"
-                                            className="form-input text-3xl font-bold py-6 bg-bg-card border-2 border-border-main focus:border-primary h-24 text-center rounded-2xl"
+                                            className="form-input text-2xl md:text-3xl font-bold py-4 md:py-6 bg-bg-card border-2 border-border-main focus:border-primary h-16 md:h-24 text-center rounded-2xl"
                                             value={quantity}
                                             onChange={(e) => setQuantity(e.target.value)}
                                         />

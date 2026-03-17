@@ -22,7 +22,7 @@ const Sidebar = () => {
     ];
 
     return (
-        <div className="sidebar w-[260px] bg-bg-sidebar border-r border-border-main flex flex-col fixed h-screen z-[100] transition-all duration-300 max-lg:w-[80px]">
+        <div className="sidebar w-[80px] lg:w-[260px] bg-bg-sidebar border-r border-border-main flex flex-col fixed h-screen z-[100] transition-all duration-300">
             <div className="logo-container p-8 flex items-center gap-3 max-lg:justify-center">
                 <LineChart className="text-primary" size={32} />
                 <span className="logo-text text-2xl font-bold max-lg:hidden">Paper Bull</span>

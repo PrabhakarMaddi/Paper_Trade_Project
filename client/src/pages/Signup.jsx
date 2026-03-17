@@ -33,27 +33,27 @@ const Signup = () => {
             <div className="absolute bottom-[-5%] right-[-5%] w-[30%] h-[30%] bg-accent-up/5 rounded-full blur-[80px]"></div>
 
             <div className="glass-card w-full max-w-[440px] animate-in fade-in zoom-in duration-500 relative z-10">
-                <div className="flex flex-col items-center gap-4 mb-10 text-center">
-                    <div className="bg-primary/10 p-4 rounded-2xl shadow-inner">
-                        <LineChart className="text-primary" size={42} />
+                <div className="flex flex-col items-center gap-3 md:gap-4 mb-8 md:mb-10 text-center">
+                    <div className="bg-primary/10 p-3 md:p-4 rounded-2xl shadow-inner">
+                        <LineChart className="text-primary" size={32} />
                     </div>
                     <div>
-                        <h1 className="text-4xl font-bold tracking-tighter logo-text mb-1">Paper Bull</h1>
-                        <p className="text-text-muted font-medium">Join India's Trading Revolution</p>
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tighter logo-text mb-1">Paper Bull</h1>
+                        <p className="text-xs md:text-sm text-text-muted font-medium">Join India's Trading Revolution</p>
                     </div>
                 </div>
 
-                <div className="space-y-6">
-                    <h2 className="text-2xl font-bold text-center text-text-main mb-2">Create Free Account</h2>
+                <div className="space-y-4 md:space-y-6">
+                    <h2 className="text-xl md:text-2xl font-bold text-center text-text-main mb-2">Create Free Account</h2>
 
-                    <form onSubmit={handleSubmit} className="space-y-5">
+                    <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
                         <div className="space-y-1.5">
-                            <label className="text-sm font-bold text-text-muted ml-1">Full Name</label>
+                            <label className="text-xs md:text-sm font-bold text-text-muted ml-1">Full Name</label>
                             <div className="relative group">
-                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light group-focus-within:text-primary transition-colors" size={20} />
+                                <User className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light group-focus-within:text-primary transition-colors" size={18} />
                                 <input
                                     type="text"
-                                    className="form-input pl-12"
+                                    className="form-input pl-11 py-2.5 md:py-3"
                                     placeholder="Rahul Sharma"
                                     value={name}
                                     onChange={(e) => setName(e.target.value)}
@@ -63,12 +63,12 @@ const Signup = () => {
                         </div>
 
                         <div className="space-y-1.5">
-                            <label className="text-sm font-bold text-text-muted ml-1">Email Address</label>
+                            <label className="text-xs md:text-sm font-bold text-text-muted ml-1">Email Address</label>
                             <div className="relative group">
-                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light group-focus-within:text-primary transition-colors" size={20} />
+                                <Mail className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light group-focus-within:text-primary transition-colors" size={18} />
                                 <input
                                     type="email"
-                                    className="form-input pl-12"
+                                    className="form-input pl-11 py-2.5 md:py-3"
                                     placeholder="rahul@example.com"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -78,12 +78,12 @@ const Signup = () => {
                         </div>
 
                         <div className="space-y-1.5">
-                            <label className="text-sm font-bold text-text-muted ml-1">Password</label>
+                            <label className="text-xs md:text-sm font-bold text-text-muted ml-1">Password</label>
                             <div className="relative group">
-                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light group-focus-within:text-primary transition-colors" size={20} />
+                                <Lock className="absolute left-4 top-1/2 -translate-y-1/2 text-text-light group-focus-within:text-primary transition-colors" size={18} />
                                 <input
                                     type="password"
-                                    className="form-input pl-12"
+                                    className="form-input pl-11 py-2.5 md:py-3"
                                     placeholder="Min. 6 characters"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -95,25 +95,25 @@ const Signup = () => {
 
                         <button
                             type="submit"
-                            className="btn-primary w-full py-4 text-lg mt-4 active:translate-y-0"
+                            className="btn-primary w-full py-3.5 md:py-4 text-base md:text-lg mt-2 active:translate-y-0"
                             disabled={isLoading}
                         >
                             {isLoading ? 'Creating Profile...' : 'Get Started Now'}
                         </button>
                     </form>
 
-                    <div className="relative py-4">
+                    <div className="relative py-3 md:py-4">
                         <div className="absolute inset-0 flex items-center">
                             <div className="w-full border-t border-border-main"></div>
                         </div>
-                        <div className="relative flex justify-center text-xs uppercase">
-                            <span className="bg-bg-main px-2 text-text-light font-bold">Already a member?</span>
+                        <div className="relative flex justify-center text-[10px] md:text-xs uppercase">
+                            <span className="bg-bg-white px-2 text-text-light font-bold">Already a member?</span>
                         </div>
                     </div>
 
                     <Link
                         to="/login"
-                        className="btn-outline w-full flex items-center justify-center py-4 text-lg"
+                        className="btn-outline w-full flex items-center justify-center py-3.5 md:py-4 text-base md:text-lg"
                     >
                         Sign In Instead
                     </Link>

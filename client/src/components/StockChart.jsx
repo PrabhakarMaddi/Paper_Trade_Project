@@ -63,7 +63,7 @@ const StockChart = ({ symbol }) => {
 
     if (loading) return (
         <div className="h-[350px] flex items-center justify-center bg-slate-50 rounded-3xl border border-slate-100 animate-pulse">
-            <span className="text-xs font-bold uppercase tracking-[0.4em] text-text-light italic">Rendering Analysis...</span>
+            <span className="text-xs font-bold uppercase tracking-[0.4em] text-text-light ">Rendering Analysis...</span>
         </div>
     );
 
@@ -74,11 +74,10 @@ const StockChart = ({ symbol }) => {
                     <button
                         key={r.value}
                         onClick={() => setRange(r.value)}
-                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${
-                            range === r.value
+                        className={`px-4 py-1.5 rounded-full text-xs font-bold transition-all duration-300 ${range === r.value
                                 ? 'bg-indigo-600 text-white shadow-lg shadow-indigo-200 scale-105'
                                 : 'bg-white text-slate-400 hover:bg-slate-50 hover:text-slate-600 border border-slate-100'
-                        }`}
+                            }`}
                     >
                         {r.label}
                     </button>

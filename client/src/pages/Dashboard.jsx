@@ -138,43 +138,43 @@ const Dashboard = () => {
         <div className="space-y-10">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                 <div>
-                    <h1 className="text-4xl font-bold tracking-tighter sm:text-5xl text-text-main uppercase">Dashboard</h1>
-                    <p className="text-text-muted mt-2 font-medium">Welcome back! Here's your market performance today.</p>
+                    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold tracking-tighter text-text-main uppercase">Dashboard</h1>
+                    <p className="text-sm md:text-base text-text-muted mt-2 font-medium">Welcome back! Here's your market performance today.</p>
                 </div>
-                <div className="bg-bg-card border border-border-main px-8 py-4 rounded-2xl flex items-center gap-6 shadow-sm shadow-indigo-50/10">
-                    <div className="text-right">
+                <div className="bg-bg-card border border-border-main px-4 md:px-8 py-4 rounded-2xl flex items-center justify-between md:justify-end gap-4 md:gap-6 shadow-sm shadow-indigo-50/10">
+                    <div className="text-left md:text-right">
                         <p className="text-[10px] uppercase font-bold text-text-light tracking-[0.2em] mb-1">Net Worth</p>
-                        <p className="text-3xl font-bold text-text-main">₹{summary.netWorth.toLocaleString('en-IN')}</p>
+                        <p className="text-2xl md:text-3xl font-bold text-text-main">₹{summary.netWorth.toLocaleString('en-IN')}</p>
                     </div>
-                    <div className={`p-4 rounded-xl shadow-inner ${summary.totalPnl >= 0 ? 'bg-accent-up/10 text-accent-up' : 'bg-accent-down/10 text-accent-down'}`}>
-                        {summary.totalPnl >= 0 ? <ArrowUpRight size={28} /> : <ArrowDownRight size={28} />}
+                    <div className={`p-3 md:p-4 rounded-xl shadow-inner ${summary.totalPnl >= 0 ? 'bg-accent-up/10 text-accent-up' : 'bg-accent-down/10 text-accent-down'}`}>
+                        {summary.totalPnl >= 0 ? <ArrowUpRight size={24} className="md:w-7 md:h-7" /> : <ArrowDownRight size={24} className="md:w-7 md:h-7" />}
                     </div>
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                 <div className="glass-card relative overflow-hidden group border-indigo-100">
-                    <IndianRupee className="absolute -right-4 -bottom-4 text-primary/5 group-hover:text-primary/10 transition-colors" size={120} />
-                    <p className="text-text-muted text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <IndianRupee className="absolute -right-4 -bottom-4 text-primary/5 group-hover:text-primary/10 transition-colors" size={100} />
+                    <p className="text-text-muted text-[10px] md:text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full bg-primary/40"></span> Available Cash
                     </p>
-                    <p className="text-4xl font-bold tracking-tight text-text-main">₹{summary.balance.toLocaleString('en-IN')}</p>
+                    <p className="text-3xl md:text-4xl font-bold tracking-tight text-text-main">₹{summary.balance.toLocaleString('en-IN')}</p>
                 </div>
 
                 <div className="glass-card relative overflow-hidden group border-purple-100">
-                    <Briefcase className="absolute -right-4 -bottom-4 text-purple-500/5 group-hover:text-purple-500/10 transition-colors" size={120} />
-                    <p className="text-text-muted text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                    <Briefcase className="absolute -right-4 -bottom-4 text-purple-500/5 group-hover:text-purple-500/10 transition-colors" size={100} />
+                    <p className="text-text-muted text-[10px] md:text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
                         <span className="w-2.5 h-2.5 rounded-full bg-purple-400/40"></span> Portfolio Value
                     </p>
-                    <p className="text-4xl font-bold tracking-tight text-text-main">₹{summary.totalCurrentValue.toLocaleString('en-IN')}</p>
+                    <p className="text-3xl md:text-4xl font-bold tracking-tight text-text-main">₹{summary.totalCurrentValue.toLocaleString('en-IN')}</p>
                 </div>
 
-                <div className="glass-card relative overflow-hidden group border-emerald-100">
-                    <Activity className="absolute -right-4 -bottom-4 text-accent-up/5 group-hover:text-accent-up/10 transition-colors" size={120} />
-                    <p className="text-text-muted text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
+                <div className="glass-card relative overflow-hidden group border-emerald-100 md:col-span-2 lg:col-span-1">
+                    <Activity className="absolute -right-4 -bottom-4 text-accent-up/5 group-hover:text-accent-up/10 transition-colors" size={100} />
+                    <p className="text-text-muted text-[10px] md:text-xs font-bold uppercase tracking-widest mb-3 flex items-center gap-2">
                         <span className={`w-2.5 h-2.5 rounded-full ${summary.totalPnl >= 0 ? 'bg-accent-up' : 'bg-accent-down'}`}></span> Overall Return
                     </p>
-                    <p className={`text-4xl font-bold tracking-tight ${summary.totalPnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
+                    <p className={`text-3xl md:text-4xl font-bold tracking-tight ${summary.totalPnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
                         {summary.totalPnl >= 0 ? '+' : ''}₹{summary.totalPnl.toLocaleString('en-IN')}
                     </p>
                     <div className={`flex items-center gap-2 mt-2 font-bold text-sm ${summary.totalPnl >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
@@ -184,11 +184,11 @@ const Dashboard = () => {
                 </div>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-10">
                 <div className="lg:col-span-2">
-                    <div className="glass-card h-full p-10">
-                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-10 gap-4">
-                            <h2 className="text-2xl font-bold tracking-tight text-text-main">YOUR WATCHLIST</h2>
+                    <div className="glass-card h-full p-6 md:p-10">
+                        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-8 md:mb-10 gap-6">
+                            <h2 className="text-xl md:text-2xl font-bold tracking-tight text-text-main uppercase">YOUR WATCHLIST</h2>
 
                             {/* Advanced Search Bar */}
                             <div className="relative w-full sm:w-80 z-20">
@@ -248,11 +248,11 @@ const Dashboard = () => {
                         <div className="overflow-x-auto">
                             <table className="w-full">
                                 <thead>
-                                    <tr className="text-left text-text-light text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main">
+                                    <tr className="text-left text-text-light text-[10px] md:text-[11px] uppercase font-bold tracking-[0.2em] border-b border-border-main">
                                         <th className="pb-5">Stock Asset</th>
                                         <th className="pb-5 text-right">Market Price</th>
-                                        <th className="pb-5 text-right">Day Change</th>
-                                        <th className="pb-5 text-right w-16">Action</th>
+                                        <th className="pb-5 text-right hidden sm:table-cell">Day Change</th>
+                                        <th className="pb-5 text-right w-12 md:w-16">Action</th>
                                     </tr>
                                 </thead>
                                 <tbody className="divide-y divide-border-light">
@@ -275,10 +275,10 @@ const Dashboard = () => {
                                                         <span className="text-xs font-bold text-text-muted transition-colors line-clamp-1">{w.name}</span>
                                                     </div>
                                                 </td>
-                                                <td className="py-6 text-right font-bold text-text-main text-lg">
+                                                <td className="py-4 md:py-6 text-right font-bold text-text-main text-base md:text-lg">
                                                     ₹{w.price.toLocaleString('en-IN', { minimumFractionDigits: 2 })}
                                                 </td>
-                                                <td className={`py-6 text-right font-bold text-lg ${w.change >= 0 ? 'text-accent-up' : 'text-accent-down'}`}>
+                                                <td className={`py-4 md:py-6 text-right font-bold text-base md:text-lg ${w.change >= 0 ? 'text-accent-up' : 'text-accent-down'} hidden sm:table-cell`}>
                                                     <div className="flex items-center justify-end gap-1">
                                                         {w.change >= 0 ? <TrendingUp size={16} /> : <TrendingDown size={16} />}
                                                         {w.change >= 0 ? '+' : ''}{w.change.toFixed(2)}
