@@ -5,8 +5,10 @@ import { Search, TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight, IndianR
 import { toast } from 'react-hot-toast';
 import StockChart from '../components/StockChart';
 import { isMarketOpen } from '../utils/market';
+import { useAuth } from '../context/AuthContext';
 
 const Trade = () => {
+    const { user } = useAuth();
     const [query, setQuery] = useState('');
     const [results, setResults] = useState([]);
     const [selectedStock, setSelectedStock] = useState(null);
@@ -17,6 +19,7 @@ const Trade = () => {
 
     const [watchlistData, setWatchlistData] = useState([]);
     const [isInWatchlist, setIsInWatchlist] = useState(false);
+    const [portfolioSummary, setPortfolioSummary] = useState(null);
 
     // New state for top movers
     const [topMovers, setTopMovers] = useState({ gainers: [], losers: [] });
@@ -26,9 +29,19 @@ const Trade = () => {
     useEffect(() => {
         fetchUserData();
         fetchTopMovers();
+        fetchPortfolio();
         const interval = setInterval(fetchTopMovers, 60000); // 1 min refresh for movers
         return () => clearInterval(interval);
     }, []);
+
+    const fetchPortfolio = async () => {
+        try {
+            const { data } = await axios.get('/portfolio');
+            setPortfolioSummary(data.summary);
+        } catch (error) {
+            console.error('Error fetching portfolio', error);
+        }
+    };
 
     const fetchTopMovers = async () => {
         try {
@@ -145,6 +158,21 @@ const Trade = () => {
             setIsLoading(false);
         }
     };
+
+    const riskRatio = portfolioSummary?.netWorth ? portfolioSummary.totalInvested / portfolioSummary.netWorth : 0;
+    const riskPercent = Math.min(Math.round(riskRatio * 100), 100);
+    let riskLabel = 'Conservative';
+    let riskColor = 'bg-emerald-500';
+    let riskTextColor = 'text-emerald-500';
+    if (riskRatio >= 0.3 && riskRatio < 0.7) {
+        riskLabel = 'Balanced';
+        riskColor = 'bg-primary';
+        riskTextColor = 'text-primary';
+    } else if (riskRatio >= 0.7) {
+        riskLabel = 'Aggressive';
+        riskColor = 'bg-accent-down';
+        riskTextColor = 'text-accent-down';
+    }
 
     return (
         <div className="space-y-6 md:y-10">
@@ -398,16 +426,16 @@ const Trade = () => {
                                 <div>
                                     <h3 className="text-xl font-bold text-text-main mb-3">Capital Strategy</h3>
                                     <p className="text-sm text-text-muted font-medium leading-relaxed">
-                                        Use your **₹10,00,000** virtual capital to build a high-performing portfolio. Monitor market signals and execute trades with precision.
+                                        Use your <strong className="text-text-main">₹{user?.balance != null ? user.balance.toLocaleString('en-IN') : '10,00,000'}</strong> virtual capital to build a high-performing portfolio. Monitor market signals and execute trades with precision.
                                     </p>
                                 </div>
                                 <div className="w-full pt-4 space-y-3">
                                     <div className="flex justify-between text-xs font-bold text-text-light uppercase tracking-widest">
                                         <span>Risk Profile</span>
-                                        <span className="text-primary">Balanced</span>
+                                        <span className={riskTextColor}>{riskLabel}</span>
                                     </div>
                                     <div className="h-1.5 bg-border-main rounded-full">
-                                        <div className="h-full bg-primary rounded-full w-[60%]"></div>
+                                        <div className={`h-full rounded-full transition-all duration-1000 ${riskColor}`} style={{ width: `${riskPercent}%` }}></div>
                                     </div>
                                 </div>
                             </div>

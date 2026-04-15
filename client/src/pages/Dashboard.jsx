@@ -132,7 +132,22 @@ const Dashboard = () => {
         }
     };
 
-    const { summary } = data;
+    const { summary, holdings } = data;
+
+    const divScore = holdings?.length ? Math.min(holdings.length * 20, 100) : 0;
+    let divColor = 'bg-accent-down';
+    let divTextColor = 'text-accent-down';
+    let divShadow = 'shadow-red-200';
+    
+    if (divScore >= 80) {
+        divColor = 'bg-accent-up';
+        divTextColor = 'text-accent-up';
+        divShadow = 'shadow-emerald-200';
+    } else if (divScore >= 40) {
+        divColor = 'bg-primary';
+        divTextColor = 'text-primary';
+        divShadow = 'shadow-indigo-200';
+    }
 
     return (
         <div className="space-y-10">
@@ -336,15 +351,15 @@ const Dashboard = () => {
 
                     <div className="glass-card border-border-main p-8">
                         <h3 className="text-lg font-bold tracking-tight mb-5 flex items-center gap-3 text-text-main uppercase">
-                            <IndianRupee className="text-accent-up" size={20} /> Portfolio Health
+                            <Activity className={divTextColor} size={20} /> Portfolio Health
                         </h3>
                         <div className="space-y-5">
                             <div className="h-2.5 bg-border-light rounded-full overflow-hidden">
-                                <div className="h-full bg-accent-up rounded-full shadow-lg shadow-emerald-200" style={{ width: '78%' }}></div>
+                                <div className={`h-full ${divColor} rounded-full shadow-lg transition-all duration-1000 ${divShadow}`} style={{ width: `${divScore}%` }}></div>
                             </div>
                             <div className="flex justify-between items-center">
                                 <p className="text-[10px] font-bold uppercase tracking-widest text-text-light">Diversification Score</p>
-                                <p className="text-sm font-bold text-accent-up">78%</p>
+                                <p className={`text-sm font-bold ${divTextColor}`}>{divScore}%</p>
                             </div>
                         </div>
                     </div>
